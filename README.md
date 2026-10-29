@@ -46,6 +46,11 @@ npm run lint
 npm run build
 ```
 
+The shared candidate profile schema is authored in Python and generated for the
+web app. See [docs/PROFILE-SCHEMA.md](docs/PROFILE-SCHEMA.md) for regeneration and
+[docs/PROFILE-REVIEW.md](docs/PROFILE-REVIEW.md) for the review form and remaining
+staging checks. Run `npm run test:web` for form and draft persistence tests.
+
 ## Talking to the database from the web app
 
 Always go through these files, never create a Supabase client yourself:

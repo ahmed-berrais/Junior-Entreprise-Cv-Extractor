@@ -1,0 +1,415 @@
+{
+  "$defs": {
+    "Basics": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "default": "",
+          "description": "Candidate's full name exactly as stated in the CV.",
+          "title": "Name",
+          "type": "string"
+        },
+        "email": {
+          "default": "",
+          "description": "Contact email from the CV; empty if absent.",
+          "pattern": "^$|^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
+          "title": "Email",
+          "type": "string"
+        },
+        "phone": {
+          "default": "",
+          "description": "Contact phone including country code when stated.",
+          "title": "Phone",
+          "type": "string"
+        },
+        "city": {
+          "default": "",
+          "description": "Candidate's city, only when stated.",
+          "title": "City",
+          "type": "string"
+        },
+        "country": {
+          "default": "",
+          "description": "Candidate's country, only when stated.",
+          "title": "Country",
+          "type": "string"
+        },
+        "headline": {
+          "default": "",
+          "description": "One-line professional headline in the CV language.",
+          "title": "Headline",
+          "type": "string"
+        },
+        "summary": {
+          "default": "",
+          "description": "Professional summary, without invented information.",
+          "title": "Summary",
+          "type": "string"
+        },
+        "links": {
+          "$ref": "#/$defs/Links",
+          "description": "Public professional links in the CV.",
+          "default": {
+            "linkedin": "",
+            "github": "",
+            "portfolio": ""
+          }
+        }
+      },
+      "title": "Basics",
+      "type": "object"
+    },
+    "Certification": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "default": "",
+          "description": "Certification title as stated.",
+          "title": "Name",
+          "type": "string"
+        },
+        "issuer": {
+          "default": "",
+          "description": "Issuing organisation as stated.",
+          "title": "Issuer",
+          "type": "string"
+        },
+        "year": {
+          "default": "",
+          "description": "Award year in YYYY format; empty if unknown.",
+          "pattern": "^$|^[0-9]{4}$",
+          "title": "Year",
+          "type": "string"
+        }
+      },
+      "title": "Certification",
+      "type": "object"
+    },
+    "Classification": {
+      "additionalProperties": false,
+      "properties": {
+        "domain": {
+          "anyOf": [
+            {
+              "enum": [
+                "software_engineering",
+                "data_ai",
+                "cybersecurity",
+                "cloud_devops",
+                "networks_telecom",
+                "embedded_iot",
+                "business_management",
+                "marketing_design",
+                "other"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Best fitting fixed domain; null if unknown.",
+          "title": "Domain"
+        },
+        "seniority": {
+          "anyOf": [
+            {
+              "enum": [
+                "student",
+                "junior",
+                "experienced"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Student, junior or experienced based only on CV evidence.",
+          "title": "Seniority"
+        },
+        "years_experience": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Years of work experience; null when it cannot be determined.",
+          "title": "Years Experience"
+        }
+      },
+      "title": "Classification",
+      "type": "object"
+    },
+    "Education": {
+      "additionalProperties": false,
+      "properties": {
+        "school": {
+          "default": "",
+          "description": "Name of the school or university.",
+          "title": "School",
+          "type": "string"
+        },
+        "degree": {
+          "default": "",
+          "description": "Degree or qualification as stated.",
+          "title": "Degree",
+          "type": "string"
+        },
+        "field": {
+          "default": "",
+          "description": "Field of study as stated.",
+          "title": "Field",
+          "type": "string"
+        },
+        "start": {
+          "default": "",
+          "description": "Start in YYYY-MM format; empty if unknown.",
+          "pattern": "^$|^[0-9]{4}-(0[1-9]|1[0-2])$",
+          "title": "Start",
+          "type": "string"
+        },
+        "end": {
+          "default": "",
+          "description": "End in YYYY-MM, 'present' if ongoing, or empty.",
+          "pattern": "^$|^present$|^[0-9]{4}-(0[1-9]|1[0-2])$",
+          "title": "End",
+          "type": "string"
+        }
+      },
+      "title": "Education",
+      "type": "object"
+    },
+    "Experience": {
+      "additionalProperties": false,
+      "properties": {
+        "company": {
+          "default": "",
+          "description": "Employer or organisation name.",
+          "title": "Company",
+          "type": "string"
+        },
+        "role": {
+          "default": "",
+          "description": "Job or internship title as stated.",
+          "title": "Role",
+          "type": "string"
+        },
+        "start": {
+          "default": "",
+          "description": "Start in YYYY-MM format; empty if unknown.",
+          "pattern": "^$|^[0-9]{4}-(0[1-9]|1[0-2])$",
+          "title": "Start",
+          "type": "string"
+        },
+        "end": {
+          "default": "",
+          "description": "End in YYYY-MM, 'present' if ongoing, or empty.",
+          "pattern": "^$|^present$|^[0-9]{4}-(0[1-9]|1[0-2])$",
+          "title": "End",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "description": "Responsibilities and results stated in the CV.",
+          "title": "Description",
+          "type": "string"
+        }
+      },
+      "title": "Experience",
+      "type": "object"
+    },
+    "Language": {
+      "additionalProperties": false,
+      "properties": {
+        "language": {
+          "default": "",
+          "description": "Name of the spoken or written language.",
+          "title": "Language",
+          "type": "string"
+        },
+        "level": {
+          "default": "",
+          "description": "Proficiency as stated; do not invent a level.",
+          "title": "Level",
+          "type": "string"
+        }
+      },
+      "title": "Language",
+      "type": "object"
+    },
+    "Links": {
+      "additionalProperties": false,
+      "properties": {
+        "linkedin": {
+          "default": "",
+          "description": "LinkedIn URL as printed, or empty if absent.",
+          "pattern": "^$|^https?://[^\\s]+$",
+          "title": "Linkedin",
+          "type": "string"
+        },
+        "github": {
+          "default": "",
+          "description": "GitHub URL as printed, or empty if absent.",
+          "pattern": "^$|^https?://[^\\s]+$",
+          "title": "Github",
+          "type": "string"
+        },
+        "portfolio": {
+          "default": "",
+          "description": "Portfolio URL as printed, or empty if absent.",
+          "pattern": "^$|^https?://[^\\s]+$",
+          "title": "Portfolio",
+          "type": "string"
+        }
+      },
+      "title": "Links",
+      "type": "object"
+    },
+    "Project": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "default": "",
+          "description": "Project title as stated.",
+          "title": "Name",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "description": "Project description without invented results.",
+          "title": "Description",
+          "type": "string"
+        },
+        "technologies": {
+          "description": "Only technologies explicitly used.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Technologies",
+          "type": "array",
+          "default": []
+        }
+      },
+      "title": "Project",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "basics": {
+      "$ref": "#/$defs/Basics",
+      "description": "Candidate's personal information.",
+      "default": {
+        "name": "",
+        "email": "",
+        "phone": "",
+        "city": "",
+        "country": "",
+        "headline": "",
+        "summary": "",
+        "links": {
+          "linkedin": "",
+          "github": "",
+          "portfolio": ""
+        }
+      }
+    },
+    "availability": {
+      "default": "",
+      "description": "Availability stated in the CV; empty if absent.",
+      "title": "Availability",
+      "type": "string"
+    },
+    "education": {
+      "description": "All stated education entries.",
+      "items": {
+        "$ref": "#/$defs/Education"
+      },
+      "title": "Education",
+      "type": "array",
+      "default": []
+    },
+    "experience": {
+      "description": "All stated work entries.",
+      "items": {
+        "$ref": "#/$defs/Experience"
+      },
+      "title": "Experience",
+      "type": "array",
+      "default": []
+    },
+    "projects": {
+      "description": "All stated projects.",
+      "items": {
+        "$ref": "#/$defs/Project"
+      },
+      "title": "Projects",
+      "type": "array",
+      "default": []
+    },
+    "skills": {
+      "description": "Only skills actually stated in the CV.",
+      "items": {
+        "type": "string"
+      },
+      "title": "Skills",
+      "type": "array",
+      "default": []
+    },
+    "languages": {
+      "description": "All stated languages and levels.",
+      "items": {
+        "$ref": "#/$defs/Language"
+      },
+      "title": "Languages",
+      "type": "array",
+      "default": []
+    },
+    "certifications": {
+      "description": "All stated certificates.",
+      "items": {
+        "$ref": "#/$defs/Certification"
+      },
+      "title": "Certifications",
+      "type": "array",
+      "default": []
+    },
+    "classification": {
+      "$ref": "#/$defs/Classification",
+      "description": "Evidence-based professional classification.",
+      "default": {
+        "domain": null,
+        "seniority": null,
+        "years_experience": null
+      }
+    },
+    "looking_for": {
+      "anyOf": [
+        {
+          "enum": [
+            "pfe",
+            "internship",
+            "job"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Chosen by the candidate at upload; never inferred by the AI.",
+      "title": "Looking For"
+    }
+  },
+  "title": "CandidateProfile",
+  "type": "object"
+}

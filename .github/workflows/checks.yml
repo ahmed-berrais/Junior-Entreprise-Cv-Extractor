@@ -15,6 +15,15 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pydantic==2.14.1
+      - run: python -m cv_worker.export_schema
+        working-directory: worker
+      - run: npm run schema:gen
+      - run: git diff --exit-code -- shared/profile.schema.json lib/profile/schema.gen.ts
+      - run: npm run test:web
       - run: npm run lint
       - run: npm run build
 
