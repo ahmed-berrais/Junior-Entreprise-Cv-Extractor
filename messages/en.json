@@ -97,5 +97,28 @@
     "tabTwoBody": "Content of the second tab.",
     "layout": "Layout",
     "layoutBody": "SiteHeader and SiteFooter sit in app/layout.tsx, so they appear on every page. Wrap page content in PageContainer."
+  },
+  "processing": {
+    "title": "We are reading your CV",
+    "queued": "Your CV is in the queue.",
+    "position": "You're number {position} in line",
+    "queuedHint": "Our AI reads one CV at a time. Keep this page open, it updates by itself.",
+    "processing": "Our AI is reading your CV…",
+    "processingHint": "This usually takes less than a minute.",
+    "done": "Your profile is ready!",
+    "doneHint": "Taking you to your profile so you can check it…",
+    "goToReview": "Check my profile",
+    "failed": "We couldn't read your CV",
+    "failedDefault": "Something went wrong while reading your CV. Please try again.",
+    "tryAgain": "Try another file",
+    "slow": "This is taking longer than usual. You can keep waiting: your place is kept.",
+    "notFound": "We can't find this CV. It may belong to another account.",
+    "notLoggedIn": "Log in with your candidate account to follow your CV.",
+    "offline": "Connection lost. Trying again…",
+    "steps": {
+      "queued": "In the queue",
+      "processing": "Reading",
+      "done": "Ready"
+    }
   }
 }

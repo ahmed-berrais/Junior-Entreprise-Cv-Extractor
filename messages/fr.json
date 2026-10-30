@@ -97,5 +97,28 @@
     "tabTwoBody": "Contenu du second onglet.",
     "layout": "Mise en page",
     "layoutBody": "SiteHeader et SiteFooter sont dans app/layout.tsx : ils apparaissent sur toutes les pages. Mettez le contenu de chaque page dans PageContainer."
+  },
+  "processing": {
+    "title": "Nous lisons votre CV",
+    "queued": "Votre CV est dans la file d'attente.",
+    "position": "Vous êtes numéro {position} dans la file",
+    "queuedHint": "Notre IA lit un CV à la fois. Gardez cette page ouverte, elle se met à jour toute seule.",
+    "processing": "Notre IA lit votre CV…",
+    "processingHint": "Cela prend en général moins d'une minute.",
+    "done": "Votre profil est prêt !",
+    "doneHint": "Nous vous emmenons vers votre profil pour le vérifier…",
+    "goToReview": "Vérifier mon profil",
+    "failed": "Nous n'avons pas pu lire votre CV",
+    "failedDefault": "Un problème est survenu pendant la lecture de votre CV. Veuillez réessayer.",
+    "tryAgain": "Essayer un autre fichier",
+    "slow": "Cela prend plus de temps que d'habitude. Vous pouvez continuer à attendre : votre place est gardée.",
+    "notFound": "Nous ne trouvons pas ce CV. Il appartient peut-être à un autre compte.",
+    "notLoggedIn": "Connectez-vous avec votre compte candidat pour suivre votre CV.",
+    "offline": "Connexion perdue. Nouvel essai…",
+    "steps": {
+      "queued": "En attente",
+      "processing": "Lecture",
+      "done": "Prêt"
+    }
   }
 }
