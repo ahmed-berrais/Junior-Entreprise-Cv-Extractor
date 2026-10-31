@@ -8,11 +8,13 @@ type User = Awaited<ReturnType<typeof createUser>>;
 let boss: User;
 let candidate: User;
 let company: User;
+let listed: User; // a candidate with a profile: only the admin may see their email
 
 before(async () => {
   [boss, candidate, company] = await Promise.all([createUser("admin"), createUser("candidate"), createUser("company")]);
   await admin.from("companies").insert({ user_id: company.id, name: "Test company" });
-  await admin.from("profiles").insert({ user_id: candidate.id }); // listed on /admin/candidates
+  listed = await createUser("candidate");
+  await admin.from("profiles").insert({ user_id: listed.id }); // shown on /admin/candidates
 });
 after(deleteTestUsers);
 
@@ -38,13 +40,14 @@ test("the admin pages are for the admin only", async () => {
     for (const page of ["/admin", "/admin/candidates"]) {
       const html = await (await fetch(`${APP_URL}${page}`, { headers: cookie ? { cookie } : {} })).text();
       assert.doesNotMatch(html, ADMIN_ONLY, `${page} rendered the admin view`);
-      assert.doesNotMatch(html, new RegExp(candidate.email), `${page} leaked a candidate's email`);
+      // Not the viewer's own email: the header's user menu shows that one, as it should.
+      assert.ok(!html.includes(listed.email), `${page} showed another candidate's email`);
     }
   }
   const html = await (await fetch(`${APP_URL}/admin`, { headers: { cookie: boss.cookie } })).text();
   assert.match(html, ADMIN_ONLY);
   const list = await (await fetch(`${APP_URL}/admin/candidates`, { headers: { cookie: boss.cookie } })).text();
-  assert.match(list, new RegExp(candidate.email), "the admin sees the candidate in the list");
+  assert.ok(list.includes(listed.email), "the admin sees the candidate in the list");
 });
 
 test("only the admin can delete, and a deleted profile disappears for companies", async () => {
