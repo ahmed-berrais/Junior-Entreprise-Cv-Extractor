@@ -109,8 +109,14 @@ to read an approved profile row would also read any column on it, including an u
 | `requeue_stuck_jobs()` | Run when the worker starts: jobs cut off by a crash go back to `queued`, or fail if they already had 3 attempts |
 
 | `approve_profile(user_id, data, draft_updated_at)` | Approval in one step (S1-32): deletes the draft, copies the checked data into `profiles`, sets `approved` and `approved_at`, queues an `embed` job. If the draft changed since the candidate reviewed it, it does nothing and returns `null`. Returns the `public_id` |
+| `admin_stats()` | The counts on `/admin` (S2-06), in one call: candidate accounts, approved / draft / hidden profiles, companies, jobs queued, and jobs failed and done **today** (since midnight, Tunisia time) |
+| `admin_candidates()` | Every candidate with a profile for `/admin/candidates`: email, name (from the profile, or the draft), status, hidden, looking for, dates. Newest first |
+| `admin_failed_jobs(limit)` | The latest failed jobs, newest first, with the candidate's name or email and the message |
+| `admin_delete_profile(user_id)` | Deletes a junk or abusive profile with its draft and jobs, in one step. The login stays. Returns the CV files still in `uploads-tmp` (the server removes them), or `null` if there was no profile |
 
-Only the server (the service role key) can run them. For `approve_profile` that matters most: a
+Only the server (the service role key) can run them, and the `admin_*` ones only after the server
+has checked that the caller is the admin (`lib/admin.ts`): they read emails and delete data
+(`supabase/tests/07_admin_overview.test.sql`). For `approve_profile` that matters most: a
 candidate who could call it could approve any data, skipping the schema check
 (`supabase/tests/05_approve_profile.test.sql`).
 
