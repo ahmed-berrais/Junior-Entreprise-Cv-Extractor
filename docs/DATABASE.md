@@ -114,6 +114,41 @@ Only the server (the service role key) can run them. For `approve_profile` that 
 candidate who could call it could approve any data, skipping the schema check
 (`supabase/tests/05_approve_profile.test.sql`).
 
+## Search: `search_profiles` (S2-12)
+
+`search_profiles(query_text, query_embedding, filters, page)` finds profiles two ways at once and
+merges the results:
+
+- **by words**: `search_tsv` against the query text ("PyTorch", "ENIT", a name);
+- **by meaning**: `embedding` against the query's embedding, so "computer vision" finds a profile
+  about object detection that never uses those words. Only the 50 closest profiles count.
+
+The two lists are merged with **reciprocal rank fusion**: each profile scores
+`1/(60 + its rank in the word list) + 1/(60 + its rank in the meaning list)`, and a list it isn't
+in adds nothing. Being found both ways wins. Without `query_embedding` (Gemini down or busy, S2-13)
+it searches by words only. Without any query it lists the filtered profiles, most recently approved first.
+
+`filters` is a JSON object, every key optional; an unknown key is an error, so a typo never turns a filter off:
+
+| Key | Example | Matches |
+|---|---|---|
+| `looking_for` | `["pfe", "internship"]` | any of them |
+| `domains` | `["data_ai"]` | any of them (the list in `worker/cv_worker/schema.py`) |
+| `skills` | `["python", "react"]` | any of them, or all of them with `"skills_match": "all"`. A project's or job's technologies count |
+| `cities` | `["Tunis"]` | any of them |
+| `schools` | `["ENIT"]` | any of them, as a whole word of the school name ("ENIS" doesn't match "ENISo") |
+| `languages` | `["English", "French"]` | all of them |
+
+Upper and lower case never matter. It returns 20 profiles per page (`page` starts at 1) with
+`public_id`, `looking_for`, `data`, `approved_at`, `score` and `total_count`.
+
+**Drafts and hidden profiles never come back**, whoever asks. The function runs with the caller's
+rights, so the access rules above still apply: an active company sees approved, visible profiles; a
+disabled company sees nothing. Logged-out visitors can't run it.
+
+Tests: `supabase/tests/07_search_profiles.test.sql` (18 fictional profiles with hand-made vectors).
+The same profiles with real Gemini embeddings: `python -m cv_worker.check_search` (worker/README.md).
+
 ## The temporary CV bucket: `uploads-tmp`
 
 A private Supabase Storage bucket where an uploaded CV waits for the worker
