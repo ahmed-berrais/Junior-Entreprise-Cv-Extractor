@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { Role } from "@/lib/auth";
+import { logOut } from "@/lib/log-out";
 import { useTranslations } from "next-intl";
 
 const spaceFor: Record<Role, string> = { candidate: "/candidate", company: "/company", admin: "/admin" };
@@ -23,11 +24,8 @@ export function UserMenu({ email, role }: { email: string; role: Role | null }) 
   const t = useTranslations("site");
   const router = useRouter();
 
-  async function logOut() {
-    // The server ends the session (POST /api/candidate/auth, "logout" signs out whatever the role).
-    await fetch("/api/candidate/auth", {
-      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "logout" }),
-    }).catch(() => null);
+  async function onLogOut() {
+    await logOut(); // the server ends the session, whatever the role (lib/log-out.ts)
     router.replace("/");
     router.refresh();
   }
@@ -54,7 +52,7 @@ export function UserMenu({ email, role }: { email: string; role: Role | null }) 
           </>
         )}
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={logOut}>
+        <DropdownMenuItem onClick={onLogOut}>
           <LogOutIcon aria-hidden="true" />
           {t("userMenu.logOut")}
         </DropdownMenuItem>
