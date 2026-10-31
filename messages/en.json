@@ -56,7 +56,6 @@
   "placeholder": {
     "candidate": "Candidate space — sign-up, upload and review go here (S1-26 → S1-32)",
     "company": "Company space — CVs, search and QR scan go here (Sprint 2)",
-    "admin": "Admin dashboard — companies and statistics go here (Sprint 2)",
     "home": "CV Extractor — landing page (S1-25)"
   },
   "whoami": {
@@ -414,6 +413,71 @@
     "contact": {
       "title": "5. Your rights and who to contact",
       "text": "Under the Tunisian personal data protection law (Organic Law No. 2004-63 of 27 July 2004), you can access, correct or delete your personal information at any time. Questions? Write to the Pristini Junior Entreprise team at {email}."
+    }
+  },
+  "admin": {
+    "nav": {
+      "overview": "Overview",
+      "candidates": "Candidates"
+    },
+    "notAdmin": "This page is for the club admin only.",
+    "loading": "Loading…",
+    "overview": {
+      "title": "Admin overview",
+      "intro": "Is everything working? The numbers update each time you open the page.",
+      "unavailable": "The numbers can't be loaded right now. Try again in a minute.",
+      "people": "Accounts and profiles",
+      "queue": "CV queue (today = since midnight, Tunisia time)",
+      "stats": {
+        "candidates": "Candidates",
+        "approved_profiles": "Approved profiles",
+        "draft_profiles": "Drafts",
+        "hidden_profiles": "Hidden profiles",
+        "companies": "Companies",
+        "jobs_queued": "Waiting in the queue",
+        "jobs_failed_today": "Failed today",
+        "jobs_done_today": "Done today"
+      },
+      "failedTitle": "Failed extractions",
+      "failedIntro": "Newest first. If many fail with the same message, the AI quota or a key is the problem, not the candidates.",
+      "topErrors": "Most frequent messages (last {count} failures)",
+      "noFailed": "No failed extraction. 🎉",
+      "when": "When",
+      "kind": "Job",
+      "candidate": "Candidate",
+      "error": "Message",
+      "attempts": "Tries",
+      "kinds": {
+        "extract": "Read CV",
+        "embed": "Search index"
+      },
+      "noMessage": "(no message)"
+    },
+    "candidates": {
+      "title": "Candidates",
+      "intro": "Every candidate with a profile, newest first. Delete only junk or abuse: it can't be undone.",
+      "count": "{count, plural, =0 {No candidate yet} one {# candidate} other {# candidates}}",
+      "name": "Name",
+      "email": "Email",
+      "status": "Status",
+      "lookingFor": "Looking for",
+      "created": "Created",
+      "noName": "(no name yet)",
+      "approved": "Approved",
+      "draft": "Draft",
+      "hidden": "Hidden",
+      "lookingForValues": {
+        "pfe": "PFE",
+        "internship": "Internship",
+        "job": "Job"
+      },
+      "delete": "Delete",
+      "deleteTitle": "Delete this profile?",
+      "deleteText": "{who}'s profile, draft and CV jobs will be deleted. Companies will no longer find it. Their login stays, so they can start again. This can't be undone.",
+      "cancel": "Cancel",
+      "confirm": "Delete the profile",
+      "deleted": "Profile deleted.",
+      "deleteFailed": "The profile could not be deleted. Try again."
     }
   }
 }

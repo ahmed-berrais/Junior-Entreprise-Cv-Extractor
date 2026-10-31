@@ -56,7 +56,6 @@
   "placeholder": {
     "candidate": "Espace candidat — inscription, dépôt et vérification du CV ici (S1-26 → S1-32)",
     "company": "Espace entreprise — CV, recherche et scan QR ici (Sprint 2)",
-    "admin": "Tableau de bord admin — entreprises et statistiques ici (Sprint 2)",
     "home": "CV Extractor — page d'accueil (S1-25)"
   },
   "whoami": {
@@ -414,6 +413,71 @@
     "contact": {
       "title": "5. Vos droits et contact",
       "text": "Conformément à la loi tunisienne sur la protection des données personnelles (loi organique n° 2004-63 du 27 juillet 2004), vous disposez d'un droit d'accès, de rectification et de suppression de vos données. Une question ? Écrivez à l'équipe de Pristini Junior Entreprise : {email}."
+    }
+  },
+  "admin": {
+    "nav": {
+      "overview": "Vue d'ensemble",
+      "candidates": "Candidats"
+    },
+    "notAdmin": "Cette page est réservée à l'administrateur du club.",
+    "loading": "Chargement…",
+    "overview": {
+      "title": "Vue d'ensemble admin",
+      "intro": "Est-ce que tout fonctionne ? Les chiffres se mettent à jour à chaque ouverture de la page.",
+      "unavailable": "Les chiffres ne peuvent pas être chargés pour le moment. Réessayez dans une minute.",
+      "people": "Comptes et profils",
+      "queue": "File des CV (aujourd'hui = depuis minuit, heure de Tunisie)",
+      "stats": {
+        "candidates": "Candidats",
+        "approved_profiles": "Profils validés",
+        "draft_profiles": "Brouillons",
+        "hidden_profiles": "Profils masqués",
+        "companies": "Entreprises",
+        "jobs_queued": "En attente dans la file",
+        "jobs_failed_today": "Échecs aujourd'hui",
+        "jobs_done_today": "Terminés aujourd'hui"
+      },
+      "failedTitle": "Extractions en échec",
+      "failedIntro": "Les plus récentes d'abord. Si beaucoup échouent avec le même message, le problème vient du quota de l'IA ou d'une clé, pas des candidats.",
+      "topErrors": "Messages les plus fréquents ({count} derniers échecs)",
+      "noFailed": "Aucune extraction en échec. 🎉",
+      "when": "Quand",
+      "kind": "Tâche",
+      "candidate": "Candidat",
+      "error": "Message",
+      "attempts": "Essais",
+      "kinds": {
+        "extract": "Lecture du CV",
+        "embed": "Index de recherche"
+      },
+      "noMessage": "(pas de message)"
+    },
+    "candidates": {
+      "title": "Candidats",
+      "intro": "Tous les candidats qui ont un profil, les plus récents d'abord. Ne supprimez que les profils indésirables ou abusifs : c'est irréversible.",
+      "count": "{count, plural, =0 {Aucun candidat pour l'instant} one {# candidat} other {# candidats}}",
+      "name": "Nom",
+      "email": "E-mail",
+      "status": "Statut",
+      "lookingFor": "Recherche",
+      "created": "Créé le",
+      "noName": "(pas encore de nom)",
+      "approved": "Validé",
+      "draft": "Brouillon",
+      "hidden": "Masqué",
+      "lookingForValues": {
+        "pfe": "PFE",
+        "internship": "Stage",
+        "job": "Emploi"
+      },
+      "delete": "Supprimer",
+      "deleteTitle": "Supprimer ce profil ?",
+      "deleteText": "Le profil, le brouillon et les tâches CV de {who} seront supprimés. Les entreprises ne le trouveront plus. Son compte reste, il pourra recommencer. C'est irréversible.",
+      "cancel": "Annuler",
+      "confirm": "Supprimer le profil",
+      "deleted": "Profil supprimé.",
+      "deleteFailed": "Le profil n'a pas pu être supprimé. Réessayez."
     }
   }
 }
