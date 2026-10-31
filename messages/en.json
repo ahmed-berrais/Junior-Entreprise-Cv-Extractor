@@ -55,7 +55,6 @@
   },
   "placeholder": {
     "candidate": "Candidate space — sign-up, upload and review go here (S1-26 → S1-32)",
-    "company": "Company space — CVs, search and QR scan go here (Sprint 2)",
     "admin": "Admin dashboard — companies and statistics go here (Sprint 2)",
     "home": "CV Extractor — landing page (S1-25)"
   },
@@ -498,5 +497,32 @@
     "deleteBusy": "Deleting…",
     "deleteFailed": "Unable to delete your account. Nothing has been confirmed deleted. Please try again.",
     "deleteCancel": "Cancel"
+  },
+  "company": {
+    "nav": {
+      "label": "Company space",
+      "cvs": "CVs",
+      "scan": "Scan QR",
+      "myCompany": "My company"
+    },
+    "logOut": "Log out",
+    "loading": "Loading…",
+    "notCompany": "This space is for companies taking part in the fair. Log in with the access the club sent you.",
+    "disabled": "This company account has been turned off. Contact the Pristini JE club if you think it's a mistake.",
+    "noRow": "Your company account isn't set up yet. Contact the Pristini JE club.",
+    "pages": {
+      "cvs": {
+        "title": "CVs",
+        "soon": "Candidates' profiles will be listed here, with search and filters (S2-10, S2-14)."
+      },
+      "scan": {
+        "title": "Scan QR",
+        "soon": "Scan a candidate's QR code at the fair to open their profile (S3-01)."
+      },
+      "myCompany": {
+        "title": "My company",
+        "soon": "Your company's name, sector, description, website and logo will be edited here (S2-09)."
+      }
+    }
   }
 }

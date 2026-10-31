@@ -1,7 +1,6 @@
-// Landing point for company login until S2-10's CV grid is integrated.
-import { getTranslations } from "next-intl/server";
-import { PageContainer } from "@/components/site/page-container";
-export default async function Page() {
-  const t = await getTranslations("myProfile");
-  return <PageContainer><p>{t("browsePending")}</p></PageContainer>;
+// S2-08 · Placeholder, replaced by S2-10 (the CV grid) and S2-14 (search and filters).
+import { ComingSoon } from "@/components/company/coming-soon";
+
+export default function Page() {
+  return <ComingSoon page="cvs" />;
 }

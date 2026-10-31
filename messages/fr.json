@@ -55,7 +55,6 @@
   },
   "placeholder": {
     "candidate": "Espace candidat — inscription, dépôt et vérification du CV ici (S1-26 → S1-32)",
-    "company": "Espace entreprise — CV, recherche et scan QR ici (Sprint 2)",
     "admin": "Tableau de bord admin — entreprises et statistiques ici (Sprint 2)",
     "home": "CV Extractor — page d'accueil (S1-25)"
   },
@@ -498,5 +497,32 @@
     "deleteBusy": "Suppression…",
     "deleteFailed": "Impossible de supprimer votre compte. Aucune suppression n’a été confirmée. Veuillez réessayer.",
     "deleteCancel": "Annuler"
+  },
+  "company": {
+    "nav": {
+      "label": "Espace entreprise",
+      "cvs": "CV",
+      "scan": "Scanner QR",
+      "myCompany": "Mon entreprise"
+    },
+    "logOut": "Se déconnecter",
+    "loading": "Chargement…",
+    "notCompany": "Cet espace est réservé aux entreprises qui participent au salon. Connectez-vous avec les accès envoyés par le club.",
+    "disabled": "Ce compte entreprise a été désactivé. Contactez le club Pristini JE si vous pensez que c'est une erreur.",
+    "noRow": "Votre compte entreprise n'est pas encore configuré. Contactez le club Pristini JE.",
+    "pages": {
+      "cvs": {
+        "title": "CV",
+        "soon": "Les profils des candidats seront listés ici, avec recherche et filtres (S2-10, S2-14)."
+      },
+      "scan": {
+        "title": "Scanner QR",
+        "soon": "Scannez le code QR d'un candidat au salon pour ouvrir son profil (S3-01)."
+      },
+      "myCompany": {
+        "title": "Mon entreprise",
+        "soon": "Le nom, le secteur, la description, le site et le logo de votre entreprise se modifieront ici (S2-09)."
+      }
+    }
   }
 }
