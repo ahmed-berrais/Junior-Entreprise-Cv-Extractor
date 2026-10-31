@@ -26,6 +26,15 @@ It reads its keys from the environment (or the repo's `.env`): see the `worker` 
 and says so. For the local Supabase, `python3 scripts/local_env.py` (repo root) writes them to
 `.env.local`; export them before running the worker.
 
+To check search with real embeddings (S2-12), on the local Supabase only:
+
+```bash
+python -m cv_worker.check_search          # loads 18 fictional profiles, runs the searches, deletes them
+python -m cv_worker.check_search --keep   # leaves them in, to build the search page on
+```
+
+It makes about 20 embedding calls (out of 1,000 a day) and prints PASS or FAIL for each S2-12 check.
+
 ## What the loop does (S1-24, `cv_worker/jobs.py`)
 
 1. At start-up, jobs a crash left in `processing` go back in line (`requeue_stuck_jobs()`).
