@@ -12,6 +12,7 @@ let company: User;
 before(async () => {
   [boss, candidate, company] = await Promise.all([createUser("admin"), createUser("candidate"), createUser("company")]);
   await admin.from("companies").insert({ user_id: company.id, name: "Test company" });
+  await admin.from("profiles").insert({ user_id: candidate.id }); // listed on /admin/candidates
 });
 after(deleteTestUsers);
 
@@ -27,14 +28,23 @@ async function approvedProfile() {
   return user;
 }
 
+// Every text of the chosen language travels inside each page (next-intl hands them to the browser
+// components), so a sentence like "Failed extractions" is in the HTML for everyone. What only the
+// admin's view renders is the failed-jobs section itself: its id is the thing to look for.
+const ADMIN_ONLY = /"failed-jobs"/;
+
 test("the admin pages are for the admin only", async () => {
   for (const cookie of [null, candidate.cookie, company.cookie]) {
-    const html = await (await fetch(`${APP_URL}/admin`, { headers: cookie ? { cookie } : {} })).text();
-    assert.match(html, /for the club admin only/);
-    assert.doesNotMatch(html, /Failed extractions/);
+    for (const page of ["/admin", "/admin/candidates"]) {
+      const html = await (await fetch(`${APP_URL}${page}`, { headers: cookie ? { cookie } : {} })).text();
+      assert.doesNotMatch(html, ADMIN_ONLY, `${page} rendered the admin view`);
+      assert.doesNotMatch(html, new RegExp(candidate.email), `${page} leaked a candidate's email`);
+    }
   }
   const html = await (await fetch(`${APP_URL}/admin`, { headers: { cookie: boss.cookie } })).text();
-  assert.match(html, /Failed extractions/);
+  assert.match(html, ADMIN_ONLY);
+  const list = await (await fetch(`${APP_URL}/admin/candidates`, { headers: { cookie: boss.cookie } })).text();
+  assert.match(list, new RegExp(candidate.email), "the admin sees the candidate in the list");
 });
 
 test("only the admin can delete, and a deleted profile disappears for companies", async () => {
