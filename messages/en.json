@@ -511,10 +511,6 @@
     "disabled": "This company account has been turned off. Contact the Pristini JE club if you think it's a mistake.",
     "noRow": "Your company account isn't set up yet. Contact the Pristini JE club.",
     "pages": {
-      "cvs": {
-        "title": "CVs",
-        "soon": "Candidates' profiles will be listed here, with search and filters (S2-10, S2-14)."
-      },
       "scan": {
         "title": "Scan QR",
         "soon": "Scan a candidate's QR code at the fair to open their profile (S3-01)."
@@ -523,6 +519,23 @@
         "title": "My company",
         "soon": "Your company's name, sector, description, website and logo will be edited here (S2-09)."
       }
+    },
+    "cvs": {
+      "title": "CVs",
+      "intro": "Every approved candidate, newest first. Open a card to see the full profile.",
+      "count": "{count, plural, =0 {No profiles yet} one {# profile} other {# profiles}}",
+      "empty": "No profiles yet",
+      "emptyHint": "Candidates appear here as soon as they approve their profile. Come back a little later.",
+      "error": "The profiles couldn't be loaded.",
+      "retry": "Try again",
+      "loadMore": "Show more",
+      "end": "That's everyone for now.",
+      "loading": "Loading profiles…",
+      "noName": "Name not given",
+      "openProfile": "Open {name}'s profile",
+      "skills": "Top skills",
+      "email": "Email",
+      "city": "City"
     }
   }
 }

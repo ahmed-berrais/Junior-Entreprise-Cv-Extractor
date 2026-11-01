@@ -2,7 +2,7 @@
 import { getTranslations } from "next-intl/server";
 import { PageContainer } from "@/components/site/page-container";
 
-export async function ComingSoon({ page }: { page: "cvs" | "scan" | "myCompany" }) {
+export async function ComingSoon({ page }: { page: "scan" | "myCompany" }) {
   const t = await getTranslations(`company.pages.${page}`);
   return (
     <PageContainer>
