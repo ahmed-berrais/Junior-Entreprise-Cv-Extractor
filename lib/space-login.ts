@@ -3,12 +3,13 @@ import { sameOrigin } from "@/lib/api-access";
 import { createClient } from "@/lib/supabase/server";
 import { homeFor } from "@/lib/access";
 import { validateAuth } from "@/lib/candidate-auth";
+import { normalizeAccessCode } from "@/lib/company-login";
 
 export async function spaceLogin(request: Request, role: "company" | "admin") {
   if (!sameOrigin(request)) return Response.json({ error: "failed" }, { status: 403 });
   const body = await request.json().catch(() => null);
   const email = typeof body?.email === "string" ? body.email.trim() : "";
-  const password = typeof body?.password === "string" ? body.password : "";
+  const password = role === "company" ? normalizeAccessCode(body?.password) : typeof body?.password === "string" ? body.password : "";
   if (validateAuth("login", email, password, "") || password.length > 256) return Response.json({ error: "invalidCredentials" }, { status: 400 });
   try {
     const client = await createClient();

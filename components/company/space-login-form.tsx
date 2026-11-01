@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { PageContainer } from "@/components/site/page-container";
 import { homeFor } from "@/lib/access";
+import { normalizeAccessCode } from "@/lib/company-login";
 
 export function SpaceLoginForm({ role }: { role: "company" | "admin" }) {
   const t = useTranslations("spaceLogin");
@@ -22,7 +23,8 @@ export function SpaceLoginForm({ role }: { role: "company" | "admin" }) {
     const form = new FormData(event.currentTarget);
     lock.current = true; setBusy(true); setError("");
     try {
-      const response = await fetch(`/api/${role}/auth`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: form.get("email"), password: form.get("password") }), signal: AbortSignal.timeout(30_000) });
+      const password = role === "company" ? normalizeAccessCode(form.get("password")) : form.get("password");
+      const response = await fetch(`/api/${role}/auth`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: form.get("email"), password }), signal: AbortSignal.timeout(30_000) });
       const result = await response.json();
       if (!response.ok) { setError(["disabled", "invalidCredentials", "rateLimit"].includes(result.error) ? result.error : "failed"); return; }
       if (result.redirect !== homeFor[role]) { setError("failed"); return; }

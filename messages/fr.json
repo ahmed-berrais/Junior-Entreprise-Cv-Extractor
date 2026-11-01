@@ -462,6 +462,7 @@
     "noResults": "Aucune entreprise ne correspond à votre recherche."
   },
   "myProfile": {
-    "manageCompanies": "Gérer les entreprises"
+    "manageCompanies": "Gérer les entreprises",
+    "browsePending": "Votre session entreprise est prête. La consultation des CV sera bientôt disponible."
   }
 }
