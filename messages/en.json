@@ -498,5 +498,68 @@
     "deleteBusy": "Deleting…",
     "deleteFailed": "Unable to delete your account. Nothing has been confirmed deleted. Please try again.",
     "deleteCancel": "Cancel"
+  },
+  "profilePage": {
+    "loading": "Loading the profile…",
+    "gate": {
+      "title": "This profile is only visible to companies registered for the fair",
+      "text": "If your company takes part in the Pristini JE job fair, log in with the access the club sent you.",
+      "login": "Company login",
+      "home": "Back to the home page"
+    },
+    "disabled": "This company account has been turned off. Contact the Pristini JE club if you think it's a mistake.",
+    "notFound": {
+      "title": "Profile not found",
+      "text": "This link doesn't lead to any profile. It may have been deleted or typed wrong.",
+      "back": "Back to the CVs"
+    },
+    "own": {
+      "banner": "This is your profile as companies see it.",
+      "edit": "Edit my profile",
+      "hidden": "Your profile is hidden: companies can't see it right now.",
+      "draft": "Your profile isn't approved yet: companies can't see it."
+    },
+    "downloadPdf": "Download PDF",
+    "pdfSoon": "PDF download is coming soon.",
+    "backToCvs": "Back to the CVs",
+    "contact": "Contact",
+    "email": "Email",
+    "phone": "Phone",
+    "location": "Location",
+    "links": "Links",
+    "availability": "Available",
+    "lookingFor": "Looking for",
+    "lookingForValues": {
+      "pfe": "PFE",
+      "internship": "Internship",
+      "job": "Job"
+    },
+    "about": "About",
+    "education": "Education",
+    "experience": "Experience",
+    "projects": "Projects",
+    "skills": "Skills",
+    "languages": "Languages",
+    "certifications": "Certifications",
+    "current": "present",
+    "technologies": "Technologies",
+    "openProject": "Open the project",
+    "grade": "Grade",
+    "experienceTypes": {
+      "internship": "Internship",
+      "job": "Job",
+      "freelance": "Freelance",
+      "volunteer": "Volunteering",
+      "other": "Other"
+    },
+    "levels": {
+      "native": "Native",
+      "fluent": "Fluent",
+      "advanced": "Advanced",
+      "intermediate": "Intermediate",
+      "basic": "Basic"
+    },
+    "yearsExperience": "{years, plural, =0 {No professional experience yet} one {# year of experience} other {# years of experience}}",
+    "approvedOn": "Profile approved on {date}"
   }
 }
