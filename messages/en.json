@@ -415,5 +415,21 @@
       "title": "5. Your rights and who to contact",
       "text": "Under the Tunisian personal data protection law (Organic Law No. 2004-63 of 27 July 2004), you can access, correct or delete your personal information at any time. Questions? Write to the Pristini Junior Entreprise team at {email}."
     }
+  },
+  "spaceLogin": {
+    "company": "Company login",
+    "admin": "Administrator login",
+    "email": "Email",
+    "code": "Access code",
+    "password": "Password",
+    "submit": "Log in",
+    "working": "Logging in…",
+    "noCode": "No code? Ask the Pristini JE team at the welcome desk.",
+    "errors": {
+      "disabled": "This company account is disabled. Please contact the organisers.",
+      "invalidCredentials": "The email or access code/password is incorrect.",
+      "rateLimit": "Too many attempts. Please try again in a few minutes.",
+      "failed": "Unable to log in. Please try again."
+    }
   }
 }

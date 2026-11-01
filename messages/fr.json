@@ -415,5 +415,21 @@
       "title": "5. Vos droits et contact",
       "text": "Conformément à la loi tunisienne sur la protection des données personnelles (loi organique n° 2004-63 du 27 juillet 2004), vous disposez d'un droit d'accès, de rectification et de suppression de vos données. Une question ? Écrivez à l'équipe de Pristini Junior Entreprise : {email}."
     }
+  },
+  "spaceLogin": {
+    "company": "Connexion entreprise",
+    "admin": "Connexion administrateur",
+    "email": "E-mail",
+    "code": "Code d’accès",
+    "password": "Mot de passe",
+    "submit": "Se connecter",
+    "working": "Connexion…",
+    "noCode": "Pas de code ? Demandez à l’équipe Pristini JE au bureau d’accueil.",
+    "errors": {
+      "disabled": "Ce compte entreprise est désactivé. Contactez les organisateurs.",
+      "invalidCredentials": "L’e-mail ou le code d’accès / mot de passe est incorrect.",
+      "rateLimit": "Trop de tentatives. Réessayez dans quelques minutes.",
+      "failed": "Connexion impossible. Veuillez réessayer."
+    }
   }
 }

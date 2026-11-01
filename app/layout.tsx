@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
+import { Suspense, type ReactNode } from "react";
 import { Geist_Mono, Figtree } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { SiteFooter } from "@/components/site/site-footer";
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   description: "Job fair CV platform",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
