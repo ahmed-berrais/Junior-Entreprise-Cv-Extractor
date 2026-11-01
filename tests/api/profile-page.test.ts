@@ -33,9 +33,12 @@ after(deleteTestUsers);
 
 async function open(cookie: string | null, id: string) {
   const html = await (await fetch(`${APP_URL}/p/${id}`, { headers: cookie ? { cookie } : {} })).text();
-  // As HTML (data-view="full"), or inside the streamed page data (\"data-view\":\"not_found\"):
-  // a notFound() inside <Suspense> arrives that way.
-  return { view: html.match(/data-view(?:="|\\":\\")([a-z_]+)/)?.[1] ?? null, html };
+  // The rendered case is an HTML attribute: data-view="full". The not-found page is the exception: a
+  // notFound() inside <Suspense> arrives only in the streamed page data. That data also carries the
+  // not-found page as a fallback on EVERY /p page, so it only counts when nothing was rendered.
+  const rendered = html.match(/data-view="([a-z_]+)"/)?.[1];
+  const notFound = html.includes(String.raw`\"data-view\":\"not_found\"`);
+  return { view: rendered ?? (notFound ? "not_found" : null), html };
 }
 
 test("a company and the admin see the full profile", async () => {
