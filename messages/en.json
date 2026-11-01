@@ -462,7 +462,41 @@
     "noResults": "No companies match your search."
   },
   "myProfile": {
+    "title": "My profile",
+    "status": "Status",
+    "draft": "Draft",
+    "approved": "Approved",
+    "hidden": "Hidden",
+    "actions": "Profile actions",
+    "edit": "Edit my profile",
+    "editHint": "Saving updates your approved profile and refreshes its search information. Your QR code stays the same.",
+    "save": "Save changes",
+    "qr": "Download my QR code",
+    "upload": "Upload a new CV",
+    "delete": "Delete my account",
+    "hide": "Hide my profile",
+    "hiddenHint": "Your profile is hidden from company browsing, search and QR links.",
+    "visibleHint": "Your approved profile is visible to active companies.",
+    "failed": "Unable to load or save your profile. Please try again.",
+    "noProfile": "Upload your CV to create your profile.",
+    "draftHint": "Your profile is still a draft. Review and approve it to share it with companies.",
+    "current": "Current",
+    "lookingFor": "Looking for",
+    "opportunities": {
+      "pfe": "End-of-studies internship (PFE)",
+      "internship": "Internship",
+      "job": "Job"
+    },
+    "accountPending": "Account deletion is not available yet. Contact the organisers to request deletion.",
+    "back": "Back to my profile",
     "manageCompanies": "Manage companies",
-    "browsePending": "Your company session is ready. CV browsing will be available soon."
+    "browsePending": "Your company session is ready. CV browsing will be available soon.",
+    "qrStable": "Your QR code never changes when you edit your profile. You can keep using the same downloaded QR code.",
+    "deleteWarning": "This permanently deletes your account, profile, drafts and uploaded CV files. This cannot be undone.",
+    "deleteConfirm": "Type DELETE to confirm",
+    "deleteSubmit": "Permanently delete my account",
+    "deleteBusy": "Deleting…",
+    "deleteFailed": "Unable to delete your account. Nothing has been confirmed deleted. Please try again.",
+    "deleteCancel": "Cancel"
   }
 }

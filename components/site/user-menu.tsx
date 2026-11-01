@@ -17,7 +17,7 @@ import {
 import type { Role } from "@/lib/auth";
 import { useTranslations } from "next-intl";
 
-const spaceFor: Record<Role, string> = { candidate: "/candidate", company: "/company", admin: "/admin" };
+const spaceFor: Record<Role, string> = { candidate: "/candidate/profile", company: "/company", admin: "/admin" };
 
 export function UserMenu({ email, role }: { email: string; role: Role | null }) {
   const t = useTranslations("site");

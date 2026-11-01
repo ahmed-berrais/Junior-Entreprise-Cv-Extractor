@@ -42,6 +42,7 @@ async function ApprovedProfile() {
 
   const png = await qrPng(profileUrl(process.env.APP_URL, profile.public_id));
   const src = `data:image/png;base64,${png.toString("base64")}`;
+  const profileCopy = await getTranslations("myProfile");
   return (
     <>
       <h1 className="text-2xl font-semibold">{t("title")}</h1>
@@ -52,6 +53,7 @@ async function ApprovedProfile() {
       <a className={buttonVariants()} href={src} download={qrFileName(profile.data?.basics?.name)}>
         {t("download")}
       </a>
+      <a className={buttonVariants({ variant: "outline" })} href="/candidate/profile">{profileCopy("back")}</a>
     </>
   );
 }

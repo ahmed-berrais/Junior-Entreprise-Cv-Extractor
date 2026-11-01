@@ -12,12 +12,14 @@ import { Button } from "@/components/ui/button";
 import { useMessages } from "next-intl";
 
 type ProfilePath = FieldPath<ProfileDraft>;
-export function ProfileReviewForm({ initialValues, updatedAt, saveDraftAction = saveProfileDraft }: {
+export function ProfileReviewForm({ initialValues, updatedAt, saveDraftAction = saveProfileDraft, editingApproved = false }: {
   initialValues: ProfileDraft; updatedAt: string;
   saveDraftAction?: typeof saveProfileDraft;
+  editingApproved?: boolean;
 }) {
   // The texts of the language chosen in the header (S1-14). Keys have no dots: "basics.name" → "basics_name".
   const copy = useMessages().review;
+  const profileCopy = useMessages().myProfile;
   const router = useRouter();
   const form = useForm<ProfileDraft>({ defaultValues: initialValues, shouldUnregister: false, shouldFocusError: false });
   const [busy, setBusy] = useState(false);
@@ -63,18 +65,19 @@ export function ProfileReviewForm({ initialValues, updatedAt, saveDraftAction = 
     if (locked.current) return;
     locked.current = true; setBusy(true); setFailed(false); setStatus(copy.saving); form.clearErrors();
     try {
-      const parsed = (approve ? ProfileSchema : DraftSchema).safeParse(form.getValues());
+      const parsed = (approve || editingApproved ? ProfileSchema : DraftSchema).safeParse(form.getValues());
       if (!parsed.success) {
         for (const issue of parsed.error.issues) form.setError(issue.path.join(".") as ProfilePath, { type: "schema", message: issue.code === "too_small" || issue.code === "invalid_type" ? copy.required : copy.invalidField });
         setFailed(true); setStatus(copy.invalid); focusErrors(); return;
       }
-      if (approve) {
+      if (approve || editingApproved) {
         const check = checkApproval(parsed.data);
         if (!check.ok) { markFields(check.fields); return; }
       }
       const saved = await saveDraftAction(parsed.data, version);
       if (!saved.ok) { setFailed(true); setStatus(copy[saved.reason]); return; }
       setVersion(saved.updatedAt); form.reset(parsed.data); setStatus(copy.saved);
+      if (editingApproved) { router.push("/candidate/profile"); router.refresh(); return; }
       if (approve) {
         setStatus(copy.approving);
         const response = await fetch("/api/profile/approve", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ updated_at: saved.updatedAt }) });
@@ -92,7 +95,7 @@ export function ProfileReviewForm({ initialValues, updatedAt, saveDraftAction = 
     finally { locked.current = false; setBusy(false); }
   }
   return <FormProvider {...form}><form ref={formElement} noValidate onSubmit={(event) => { event.preventDefault(); void persist(false); }} className="space-y-8">
-    <header><h1 className="text-3xl font-semibold">{copy.title}</h1><p className="mt-2 text-muted-foreground">{copy.intro}</p><p className="mt-2 text-sm">{copy.approvalRequirements}</p></header>
+    <header><h1 className="text-3xl font-semibold">{editingApproved ? profileCopy.edit : copy.title}</h1><p className="mt-2 text-muted-foreground">{editingApproved ? profileCopy.editHint : copy.intro}</p><p className="mt-2 text-sm">{copy.approvalRequirements}</p></header>
     <fieldset disabled={busy} className="min-w-0 space-y-8">
       <section aria-labelledby="personal-title"><h2 id="personal-title" className="mb-4 text-xl font-semibold">{copy.personal}</h2><div className="grid gap-4 sm:grid-cols-2">{personal.map(input)}</div></section>
       <RepeatableSections linksOnly />
@@ -109,6 +112,6 @@ export function ProfileReviewForm({ initialValues, updatedAt, saveDraftAction = 
       </div></section>
       <RepeatableSections />
     </fieldset>
-    <div className="space-y-3 border-t py-4"><p role={failed ? "alert" : "status"} aria-live="polite">{status}</p><div className="flex flex-col gap-3 sm:flex-row"><Button type="submit" disabled={busy} className="min-h-11" variant="outline">{copy.save}</Button><Button type="button" disabled={busy} className="min-h-11" onClick={() => void persist(true)}>{copy.approve}</Button></div></div>
+    <div className="space-y-3 border-t py-4"><p role={failed ? "alert" : "status"} aria-live="polite">{status}</p><div className="flex flex-col gap-3 sm:flex-row"><Button type="submit" disabled={busy} className="min-h-11" variant="outline">{editingApproved ? profileCopy.save : copy.save}</Button>{!editingApproved && <Button type="button" disabled={busy} className="min-h-11" onClick={() => void persist(true)}>{copy.approve}</Button>}</div></div>
   </form></FormProvider>;
 }
