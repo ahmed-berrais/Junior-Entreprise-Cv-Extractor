@@ -431,5 +431,37 @@
       "rateLimit": "Too many attempts. Please try again in a few minutes.",
       "failed": "Unable to log in. Please try again."
     }
+  },
+  "companies": {
+    "title": "Company management",
+    "name": "Company name",
+    "email": "Email",
+    "sector": "Sector",
+    "created": "Date added",
+    "status": "Status",
+    "actions": "Actions",
+    "add": "Add company and email code",
+    "resend": "Resend code",
+    "disable": "Disable",
+    "enable": "Enable",
+    "active": "Active",
+    "disabled": "Disabled",
+    "confirmResend": "Send a new code to {name}? The previous code will stop working.",
+    "confirmDisable": "Disable {name}? They will lose access immediately.",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "success": "The action completed successfully.",
+    "failed": "Unable to complete the action. Please try again.",
+    "invalid": "Check the company name, email and sector.",
+    "emailUsed": "This email already has an account.",
+    "emailFailed": "The account/code was saved, but email delivery failed. Use Resend code to generate and send another code.",
+    "loading": "Loading companies…",
+    "empty": "No companies registered yet.",
+    "retry": "Try again",
+    "search": "Search companies",
+    "noResults": "No companies match your search."
+  },
+  "myProfile": {
+    "manageCompanies": "Manage companies"
   }
 }

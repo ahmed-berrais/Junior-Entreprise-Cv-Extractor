@@ -431,5 +431,37 @@
       "rateLimit": "Trop de tentatives. Réessayez dans quelques minutes.",
       "failed": "Connexion impossible. Veuillez réessayer."
     }
+  },
+  "companies": {
+    "title": "Gestion des entreprises",
+    "name": "Nom de l’entreprise",
+    "email": "E-mail",
+    "sector": "Secteur",
+    "created": "Date d’ajout",
+    "status": "Statut",
+    "actions": "Actions",
+    "add": "Ajouter l’entreprise et envoyer le code",
+    "resend": "Renvoyer un code",
+    "disable": "Désactiver",
+    "enable": "Activer",
+    "active": "Active",
+    "disabled": "Désactivée",
+    "confirmResend": "Envoyer un nouveau code à {name} ? L’ancien code cessera de fonctionner.",
+    "confirmDisable": "Désactiver {name} ? Son accès sera immédiatement bloqué.",
+    "confirm": "Confirmer",
+    "cancel": "Annuler",
+    "success": "L’action a été effectuée.",
+    "failed": "Impossible d’effectuer l’action. Veuillez réessayer.",
+    "invalid": "Vérifiez le nom, l’e-mail et le secteur.",
+    "emailUsed": "Un compte utilise déjà cet e-mail.",
+    "emailFailed": "Le compte/code a été enregistré, mais l’envoi de l’e-mail a échoué. Utilisez « Renvoyer un code » pour en générer et envoyer un autre.",
+    "loading": "Chargement des entreprises…",
+    "empty": "Aucune entreprise inscrite.",
+    "retry": "Réessayer",
+    "search": "Rechercher une entreprise",
+    "noResults": "Aucune entreprise ne correspond à votre recherche."
+  },
+  "myProfile": {
+    "manageCompanies": "Gérer les entreprises"
   }
 }
