@@ -1,0 +1,129 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+import { JSDOM } from "jsdom";
+import React from "react";
+import { AppRouterContext } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { NextIntlClientProvider } from "next-intl";
+import en from "../../messages/en.json";
+import fr from "../../messages/fr.json";
+
+const dom = new JSDOM("<!doctype html><html><body></body></html>", { url: "http://localhost/admin" });
+Object.assign(globalThis, {
+  window: dom.window,
+  document: dom.window.document,
+  self: dom.window,
+  HTMLElement: dom.window.HTMLElement,
+  HTMLInputElement: dom.window.HTMLInputElement,
+  HTMLAnchorElement: dom.window.HTMLAnchorElement,
+  Node: dom.window.Node,
+  getComputedStyle: dom.window.getComputedStyle,
+  requestIdleCallback: (fn: (deadline: { didTimeout: boolean; timeRemaining: () => number }) => void) =>
+    setTimeout(() => fn({ didTimeout: false, timeRemaining: () => 50 }), 0),
+  cancelIdleCallback: (id: number) => clearTimeout(id),
+});
+Object.defineProperty(globalThis, "navigator", { value: dom.window.navigator, configurable: true });
+
+test("admin layout navigation and logout (S2-03)", async (suite) => {
+  const { render, screen, cleanup } = await import("@testing-library/react");
+  const userEvent = (await import("@testing-library/user-event")).default;
+  const { AdminLayoutShell } = await import("@/components/admin/admin-layout-shell");
+
+  const originalFetch = globalThis.fetch;
+  const redirects: string[] = [];
+  const router = {
+    bfcacheId: "test",
+    back() {},
+    forward() {},
+    refresh() {},
+    push() {},
+    replace(path: string) {
+      redirects.push(path);
+    },
+    prefetch: async () => {},
+  };
+
+  suite.afterEach(() => {
+    cleanup();
+    globalThis.fetch = originalFetch;
+    redirects.length = 0;
+  });
+
+  await suite.test("renders header, 3 navigation links, and logout button in English", async () => {
+    render(
+      <NextIntlClientProvider timeZone="UTC" locale="en" messages={en}>
+        <AppRouterContext.Provider value={router}>
+          <AdminLayoutShell userEmail="admin@pristini.tn">
+            <div data-testid="admin-child">Dashboard Content</div>
+          </AdminLayoutShell>
+        </AppRouterContext.Provider>
+      </NextIntlClientProvider>
+    );
+
+    // Child rendered
+    assert.ok(screen.getByTestId("admin-child"));
+
+    // Header has "Admin"
+    assert.ok(screen.getAllByText(en.admin.header.title).length >= 1);
+
+    // 3 navigation links exist with correct hrefs
+    const overviewLinks = screen.getAllByRole("link", { name: new RegExp(en.admin.nav.overview, "i") });
+    assert.ok(overviewLinks.some((link) => link.getAttribute("href") === "/admin"));
+
+    const companiesLinks = screen.getAllByRole("link", { name: new RegExp(en.admin.nav.companies, "i") });
+    assert.ok(companiesLinks.some((link) => link.getAttribute("href") === "/admin/companies"));
+
+    const candidatesLinks = screen.getAllByRole("link", { name: new RegExp(en.admin.nav.candidates, "i") });
+    assert.ok(candidatesLinks.some((link) => link.getAttribute("href") === "/admin/candidates"));
+
+    // Check touch target classes on links (min-h-[44px])
+    for (const link of [...overviewLinks, ...companiesLinks, ...candidatesLinks]) {
+      assert.ok(link.className.includes("min-h-[44px]"), "link touch target must be at least 44px");
+    }
+
+    // Logout button exists and has min-h-[44px]
+    const logoutBtn = screen.getByRole("button", { name: new RegExp(en.admin.header.logout, "i") });
+    assert.ok(logoutBtn.className.includes("min-h-[44px]"), "logout button touch target must be at least 44px");
+  });
+
+  await suite.test("renders navigation in French without issues", async () => {
+    render(
+      <NextIntlClientProvider timeZone="UTC" locale="fr" messages={fr}>
+        <AppRouterContext.Provider value={router}>
+          <AdminLayoutShell userEmail="admin@pristini.tn">
+            <div>Contenu admin</div>
+          </AdminLayoutShell>
+        </AppRouterContext.Provider>
+      </NextIntlClientProvider>
+    );
+
+    assert.ok(screen.getAllByText(fr.admin.header.title).length >= 1);
+    assert.ok(screen.getAllByRole("link", { name: new RegExp(fr.admin.nav.overview, "i") }).length >= 1);
+    assert.ok(screen.getAllByRole("link", { name: new RegExp(fr.admin.nav.companies, "i") }).length >= 1);
+    assert.ok(screen.getAllByRole("link", { name: new RegExp(fr.admin.nav.candidates, "i") }).length >= 1);
+  });
+
+  await suite.test("clicking logout triggers POST /api/candidate/auth and navigates to /admin/login", async () => {
+    const calls: { url: string; body: unknown }[] = [];
+    globalThis.fetch = async (url, options) => {
+      calls.push({ url: String(url), body: JSON.parse(String(options?.body)) });
+      return Response.json({ redirect: "/candidate/login" });
+    };
+
+    render(
+      <NextIntlClientProvider timeZone="UTC" locale="en" messages={en}>
+        <AppRouterContext.Provider value={router}>
+          <AdminLayoutShell>
+            <div>Dashboard</div>
+          </AdminLayoutShell>
+        </AppRouterContext.Provider>
+      </NextIntlClientProvider>
+    );
+
+    const user = userEvent.setup();
+    const logoutBtn = screen.getByRole("button", { name: new RegExp(en.admin.header.logout, "i") });
+    await user.click(logoutBtn);
+
+    assert.deepEqual(calls, [{ url: "/api/candidate/auth", body: { action: "logout" } }]);
+    assert.deepEqual(redirects, ["/admin/login"]);
+  });
+});

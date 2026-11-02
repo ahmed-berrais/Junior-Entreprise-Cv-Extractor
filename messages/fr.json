@@ -498,5 +498,43 @@
     "deleteBusy": "Suppression…",
     "deleteFailed": "Impossible de supprimer votre compte. Aucune suppression n’a été confirmée. Veuillez réessayer.",
     "deleteCancel": "Annuler"
+  },
+  "admin": {
+    "header": {
+      "title": "Admin",
+      "badge": "Administrateur",
+      "logout": "Se déconnecter",
+      "loggingOut": "Déconnexion…"
+    },
+    "nav": {
+      "ariaLabel": "Navigation administrateur",
+      "overview": "Vue d’ensemble",
+      "companies": "Entreprises",
+      "candidates": "Candidats"
+    },
+    "overview": {
+      "title": "Vue d’ensemble administrateur",
+      "subtitle": "Administration du salon de l’emploi et tableau de bord en direct",
+      "description": "Bienvenue dans l’espace d’administration Pristini Junior Entreprise. Gérez les entreprises participantes et les CV des candidats pour le salon de l’emploi.",
+      "quickAccess": "Accès rapide",
+      "companiesCard": {
+        "title": "Gestion des entreprises",
+        "description": "Ajouter des entreprises participantes, générer des codes d’accès à dix caractères, renvoyer des codes et gérer les accès.",
+        "action": "Gérer les entreprises"
+      },
+      "candidatesCard": {
+        "title": "Candidats et CV",
+        "description": "Consulter les CV importés, suivre l’extraction par IA, inspecter les profils approuvés et préparer les listes pour le salon.",
+        "action": "Consulter les candidats"
+      }
+    },
+    "candidates": {
+      "title": "Gestion des candidats et des CV",
+      "subtitle": "Recherche de candidats et gestion des profils",
+      "placeholder": "L’interface complète de consultation et de recherche des CV de candidats sera disponible dans la tâche S2-06.",
+      "status": "En cours (Sprint 2)",
+      "backToOverview": "Retour à la vue d’ensemble",
+      "goToCompanies": "Gérer les entreprises"
+    }
   }
 }

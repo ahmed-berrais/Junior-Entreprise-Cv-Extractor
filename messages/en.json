@@ -498,5 +498,43 @@
     "deleteBusy": "Deleting…",
     "deleteFailed": "Unable to delete your account. Nothing has been confirmed deleted. Please try again.",
     "deleteCancel": "Cancel"
+  },
+  "admin": {
+    "header": {
+      "title": "Admin",
+      "badge": "Administrator",
+      "logout": "Log out",
+      "loggingOut": "Logging out…"
+    },
+    "nav": {
+      "ariaLabel": "Admin navigation",
+      "overview": "Overview",
+      "companies": "Companies",
+      "candidates": "Candidates"
+    },
+    "overview": {
+      "title": "Admin Overview",
+      "subtitle": "Job fair administration and real-time dashboard",
+      "description": "Welcome to the Pristini Junior Entreprise administrator space. Manage participating companies and candidate CVs for the job fair.",
+      "quickAccess": "Quick access",
+      "companiesCard": {
+        "title": "Company Management",
+        "description": "Add participating companies, generate ten-character access codes, resend codes, and manage active status.",
+        "action": "Manage companies"
+      },
+      "candidatesCard": {
+        "title": "Candidates & CVs",
+        "description": "Review uploaded CVs, monitor AI extraction status, inspect approved profiles, and prepare job-fair lists.",
+        "action": "View candidates"
+      }
+    },
+    "candidates": {
+      "title": "Candidates & CV Management",
+      "subtitle": "Candidate CV search and profile management",
+      "placeholder": "The full candidate CV browsing and search interface will be available in Task S2-06.",
+      "status": "In progress (Sprint 2)",
+      "backToOverview": "Back to Overview",
+      "goToCompanies": "Manage Companies"
+    }
   }
 }
