@@ -129,3 +129,10 @@
     @apply font-sans;
   }
 }
+/* S2-08 · The company space's bottom bar is fixed on phones: keep the end of the page (the footer)
+   above it instead of under it. */
+@media (width < 40rem) {
+  body:has([data-slot="company-bottom-nav"]) {
+    padding-bottom: calc(4rem + env(safe-area-inset-bottom));
+  }
+}
