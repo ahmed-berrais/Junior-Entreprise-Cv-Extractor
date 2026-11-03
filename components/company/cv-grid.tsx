@@ -3,9 +3,15 @@
 // It reads the search API without a search term (GET /api/search?page=N, S2-13): no Gemini call,
 // and drafts and hidden profiles never come back (search_profiles decides, with the company's own
 // rights). 20 cards per page; the next page loads when the end of the grid scrolls into view, with
-// a "Show more" button as a fallback. S2-14 adds the search bar and filters on the same API.
+// a "Show more" button as a fallback.
+//
+// S2-14: the search bar and filters (cv-search.tsx) pass their query string, which goes to the API as is.
+// A new search remounts the grid (key={query}), so old pages never mix with new ones. With search text,
+// the API ranks every profile by meaning, best first: the count says "profiles, best matches first",
+// never "N matches". When Gemini didn't answer (degraded: true), a note says only words were searched.
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
+import { InfoIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { SearchResponse } from "@/lib/search/run-search";
 import { ProfileCard, type ProfileCardData } from "./profile-card";
@@ -16,11 +22,17 @@ type State = {
   page: number; // the last page loaded
   loading: boolean;
   failed: boolean;
+  degraded: boolean;
 };
 
-export function CvGrid() {
+export function CvGrid({ query = "", searching = false, ranked = false, onClearAll }: {
+  query?: string; // the search page's query string, without page
+  searching?: boolean; // a search text or a filter is on
+  ranked?: boolean; // there is search text, so results come best first
+  onClearAll?: () => void;
+}) {
   const t = useTranslations("company.cvs");
-  const [state, setState] = useState<State>({ cards: [], total: null, page: 0, loading: true, failed: false });
+  const [state, setState] = useState<State>({ cards: [], total: null, page: 0, loading: true, failed: false, degraded: false });
   const busy = useRef(false);
   const sentinel = useRef<HTMLDivElement>(null);
 
@@ -29,7 +41,7 @@ export function CvGrid() {
     busy.current = true;
     setState((s) => ({ ...s, loading: true, failed: false }));
     try {
-      const res = await fetch(`/api/search?page=${page}`, { cache: "no-store" });
+      const res = await fetch(`/api/search?${query ? `${query}&` : ""}page=${page}`, { cache: "no-store" });
       if (!res.ok) throw new Error(String(res.status));
       const body = (await res.json()) as SearchResponse;
       setState((s) => {
@@ -41,6 +53,7 @@ export function CvGrid() {
           page,
           loading: false,
           failed: false,
+          degraded: page === 1 ? body.degraded : s.degraded || body.degraded,
         };
       });
     } catch {
@@ -48,7 +61,7 @@ export function CvGrid() {
     } finally {
       busy.current = false;
     }
-  }, []);
+  }, [query]);
 
   useEffect(() => {
     // The first page loads once the grid is on screen (fetch is a side effect, so it lives here).
@@ -100,6 +113,19 @@ export function CvGrid() {
     return <Failed onRetry={() => loadPage(1)} />;
   }
 
+  if (state.total === 0 && searching) {
+    return (
+      <div className="flex flex-col gap-4">
+        {state.degraded && <DegradedNote />}
+        <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed bg-card px-6 py-12 text-center">
+          <p className="font-heading text-lg font-semibold">{t("noMatch")}</p>
+          <p className="max-w-md text-sm text-muted-foreground">{t("noMatchHint")}</p>
+          {onClearAll && <Button variant="outline" className="mt-2" onClick={onClearAll}>{t("clearAll")}</Button>}
+        </div>
+      </div>
+    );
+  }
+
   if (state.total === 0) {
     return (
       <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed bg-card px-6 py-12 text-center">
@@ -111,7 +137,13 @@ export function CvGrid() {
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-sm font-medium" aria-live="polite">{t("count", { count: state.total ?? 0 })}</p>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-sm font-medium" aria-live="polite">
+          {t(ranked ? "countRanked" : "count", { count: state.total ?? 0 })}
+        </p>
+        {searching && onClearAll && <Button variant="ghost" size="sm" onClick={onClearAll}>{t("clearAll")}</Button>}
+      </div>
+      {state.degraded && <DegradedNote />}
       <Grid>
         {state.cards.map((card) => (
           <li key={card.public_id}><ProfileCard profile={card} /></li>
@@ -134,6 +166,17 @@ export function CvGrid() {
 
 function Grid({ children }: { children: React.ReactNode }) {
   return <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">{children}</ul>;
+}
+
+// Discreet: the results are still good, just found by words only.
+function DegradedNote() {
+  const t = useTranslations("company.cvs");
+  return (
+    <p role="status" className="flex items-start gap-2 rounded-lg bg-muted px-3 py-2 text-sm text-muted-foreground">
+      <InfoIcon className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+      {t("degraded")}
+    </p>
+  );
 }
 
 function Failed({ onRetry }: { onRetry: () => void }) {
