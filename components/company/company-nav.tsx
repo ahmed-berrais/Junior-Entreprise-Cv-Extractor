@@ -2,10 +2,12 @@
 // S2-08 · The company space's navigation: CVs, Scan QR, My company, plus the company name and logout.
 // Phone: a bottom bar with the three icons, in reach of the thumb (Ahmed's note: the Scan button
 // must be one tap away). Laptop (≥ 640 px): a bar under the site header. Same links in both.
+// The admin may browse the CVs too (companyName = null): they get the CVs and a way back to their
+// dashboard, not Scan or My company, which the proxy keeps for companies.
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { BuildingIcon, FilesIcon, LogOutIcon, ScanLineIcon } from "lucide-react";
+import { BuildingIcon, FilesIcon, LayoutDashboardIcon, LogOutIcon, ScanLineIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { logOut } from "@/lib/log-out";
 import { cn } from "cn";
@@ -16,8 +18,15 @@ const LINKS = [
   { key: "myCompany", href: "/company/my-company", Icon: BuildingIcon },
 ] as const;
 
-export function CompanyNav({ companyName }: { companyName: string }) {
+const ADMIN_LINKS = [
+  { key: "cvs", href: "/company/cvs", Icon: FilesIcon },
+  { key: "adminHome", href: "/admin", Icon: LayoutDashboardIcon },
+] as const;
+
+export function CompanyNav({ companyName }: { companyName: string | null }) {
   const t = useTranslations("company");
+  const links = companyName === null ? ADMIN_LINKS : LINKS;
+  const title = companyName ?? t("adminTitle");
   const pathname = usePathname();
   const router = useRouter();
   const isCurrent = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
@@ -33,11 +42,11 @@ export function CompanyNav({ companyName }: { companyName: string }) {
       {/* Top bar: the company name and logout everywhere; the three links on laptops only. */}
       <div className="border-b bg-card">
         <div className="mx-auto flex h-14 w-full max-w-5xl items-center gap-4 px-4 sm:px-6">
-          <p className="min-w-0 flex-1 truncate font-heading font-semibold sm:flex-none" title={companyName}>
-            {companyName}
+          <p className="min-w-0 flex-1 truncate font-heading font-semibold sm:flex-none" title={title}>
+            {title}
           </p>
           <nav aria-label={t("nav.label")} className="hidden flex-1 items-center gap-1 sm:flex">
-            {LINKS.map(({ key, href, Icon }) => (
+            {links.map(({ key, href, Icon }) => (
               <Link
                 key={key}
                 href={href}
@@ -65,8 +74,8 @@ export function CompanyNav({ companyName }: { companyName: string }) {
         data-slot="company-bottom-nav"
         className="fixed inset-x-0 bottom-0 z-40 border-t bg-card pb-[env(safe-area-inset-bottom)] sm:hidden"
       >
-        <ul className="grid grid-cols-3">
-          {LINKS.map(({ key, href, Icon }) => (
+        <ul className={cn("grid", links.length === 3 ? "grid-cols-3" : "grid-cols-2")}>
+          {links.map(({ key, href, Icon }) => (
             <li key={key}>
               <Link
                 href={href}

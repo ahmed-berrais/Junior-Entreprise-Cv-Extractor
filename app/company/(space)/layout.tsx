@@ -1,6 +1,8 @@
 // S2-08 · The frame every company page lives in: the company navigation (components/company/
-// company-nav.tsx) around the page. Only an active company gets in (lib/company-access.ts); anyone else
-// sees why, and no company page is rendered. Reads the login cookie, so it sits inside <Suspense>.
+// company-nav.tsx) around the page. Only an active company or the admin gets in (lib/company-access.ts);
+// anyone else sees why, and no company page is rendered. Reads the login cookie, so it sits inside
+// <Suspense>. The (space) folder keeps /company/login (S2-01) outside this gate: a visitor who isn't
+// logged in yet must see the login form, not "this space is for companies". The URLs don't change.
 import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
 import { PageContainer } from "@/components/site/page-container";
@@ -29,7 +31,7 @@ async function CompanyGate({ children }: { children: React.ReactNode }) {
   }
   return (
     <>
-      <CompanyNav companyName={access.name} />
+      <CompanyNav companyName={access.as === "company" ? access.name : null} />
       <div className="flex flex-1 flex-col">{children}</div>
     </>
   );

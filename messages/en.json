@@ -503,7 +503,8 @@
       "label": "Company space",
       "cvs": "CVs",
       "scan": "Scan QR",
-      "myCompany": "My company"
+      "myCompany": "My company",
+      "adminHome": "Admin"
     },
     "logOut": "Log out",
     "loading": "Loading…",
@@ -536,6 +537,7 @@
       "skills": "Top skills",
       "email": "Email",
       "city": "City"
-    }
+    },
+    "adminTitle": "Administrator"
   }
 }

@@ -4,14 +4,17 @@
 import { after, before, test } from "node:test";
 import assert from "node:assert/strict";
 import example from "../fixtures/example-profile.json";
+import en from "../../messages/en.json";
 import { admin, APP_URL, createUser, deleteTestUsers } from "./helpers";
 
 type User = Awaited<ReturnType<typeof createUser>>;
 let company: User;
+let organiser: User;
 const ids: Record<"approved" | "draft" | "hidden", string> = { approved: "", draft: "", hidden: "" };
 
 before(async () => {
   company = await createUser("company");
+  organiser = await createUser("admin");
   assert.ifError((await admin.from("companies").insert({ user_id: company.id, name: "Grid Test Co", disabled: false })).error);
   for (const kind of ["draft", "hidden", "approved"] as const) {
     const user = await createUser("candidate");
@@ -55,4 +58,26 @@ test("newest approval first, and the card carries the email", async () => {
   const first = (await res.json()).results[0];
   assert.equal(first.public_id, ids.approved, "the profile approved last comes first");
   assert.equal(first.email, example.basics.email);
+});
+
+// Every page carries all the translations for the browser, so a text being in the HTML proves
+// nothing: check that it's rendered, as the content of an element.
+const shows = (html: string, text: string) => html.includes(`>${text}<`);
+
+// Ahmed's review on #36: since #29 the admin may open the CV list; the layout must let them in too.
+test("the admin opens /company/cvs and gets the grid, not \"this space is for companies\"", async () => {
+  const res = await fetch(`${APP_URL}/company/cvs`, { headers: { cookie: organiser.cookie }, redirect: "manual" });
+  assert.equal(res.status, 200);
+  const html = await res.text();
+  assert.ok(!shows(html, en.company.notCompany), "the gate let the admin through");
+  assert.ok(shows(html, en.company.adminTitle), "the navigation says Administrator");
+});
+
+// The company layout must not wrap the login page: a visitor who isn't logged in sees the form.
+test("/company/login shows the login form to a visitor, outside the company gate", async () => {
+  const res = await fetch(`${APP_URL}/company/login`, { redirect: "manual" });
+  assert.equal(res.status, 200);
+  const html = await res.text();
+  assert.ok(shows(html, en.spaceLogin.company), "the login form is there");
+  assert.ok(!shows(html, en.company.notCompany), "no company-gate message on the login page");
 });

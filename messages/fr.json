@@ -503,7 +503,8 @@
       "label": "Espace entreprise",
       "cvs": "CV",
       "scan": "Scanner QR",
-      "myCompany": "Mon entreprise"
+      "myCompany": "Mon entreprise",
+      "adminHome": "Admin"
     },
     "logOut": "Se déconnecter",
     "loading": "Chargement…",
@@ -536,6 +537,7 @@
       "skills": "Compétences principales",
       "email": "E-mail",
       "city": "Ville"
-    }
+    },
+    "adminTitle": "Administrateur"
   }
 }
