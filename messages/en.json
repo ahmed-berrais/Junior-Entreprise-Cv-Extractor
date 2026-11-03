@@ -55,7 +55,6 @@
   },
   "placeholder": {
     "candidate": "Candidate space — sign-up, upload and review go here (S1-26 → S1-32)",
-    "company": "Company space — CVs, search and QR scan go here (Sprint 2)",
     "admin": "Admin dashboard — companies and statistics go here (Sprint 2)",
     "home": "CV Extractor — landing page (S1-25)"
   },
@@ -498,5 +497,47 @@
     "deleteBusy": "Deleting…",
     "deleteFailed": "Unable to delete your account. Nothing has been confirmed deleted. Please try again.",
     "deleteCancel": "Cancel"
+  },
+  "company": {
+    "nav": {
+      "label": "Company space",
+      "cvs": "CVs",
+      "scan": "Scan QR",
+      "myCompany": "My company",
+      "adminHome": "Admin"
+    },
+    "logOut": "Log out",
+    "loading": "Loading…",
+    "notCompany": "This space is for companies taking part in the fair. Log in with the access the club sent you.",
+    "disabled": "This company account has been turned off. Contact the Pristini JE club if you think it's a mistake.",
+    "noRow": "Your company account isn't set up yet. Contact the Pristini JE club.",
+    "pages": {
+      "scan": {
+        "title": "Scan QR",
+        "soon": "Scan a candidate's QR code at the fair to open their profile (S3-01)."
+      },
+      "myCompany": {
+        "title": "My company",
+        "soon": "Your company's name, sector, description, website and logo will be edited here (S2-09)."
+      }
+    },
+    "cvs": {
+      "title": "CVs",
+      "intro": "Every approved candidate, newest first. Open a card to see the full profile.",
+      "count": "{count, plural, =0 {No profiles yet} one {# profile} other {# profiles}}",
+      "empty": "No profiles yet",
+      "emptyHint": "Candidates appear here as soon as they approve their profile. Come back a little later.",
+      "error": "The profiles couldn't be loaded.",
+      "retry": "Try again",
+      "loadMore": "Show more",
+      "end": "That's everyone for now.",
+      "loading": "Loading profiles…",
+      "noName": "Name not given",
+      "openProfile": "Open {name}'s profile",
+      "skills": "Top skills",
+      "email": "Email",
+      "city": "City"
+    },
+    "adminTitle": "Administrator"
   }
 }
