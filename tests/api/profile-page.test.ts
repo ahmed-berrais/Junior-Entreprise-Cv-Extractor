@@ -1,6 +1,8 @@
-// S2-11 · /p/<public_id> against the running app and the local Supabase: the four cases, and that
-// nobody who may not see a profile gets any of its data in the page. Each case marks what it rendered
-// with data-view (every text of the language travels in every page, so texts can't tell them apart).
+// S2-11 · /p/<public_id> against the running app and the local Supabase: who sees the profile, and
+// that nobody who may not see it gets any of its data. Each case marks what it rendered with
+// data-view (every text of the language travels in every page, so texts can't tell them apart).
+// Logged-out visitors, candidates and disabled companies are stopped by the proxy (lib/access.ts)
+// before the page, so for them the test checks the redirect and that it carries no profile data.
 import { after, before, test } from "node:test";
 import assert from "node:assert/strict";
 import example from "../fixtures/example-profile.json";
@@ -32,13 +34,15 @@ before(async () => {
 after(deleteTestUsers);
 
 async function open(cookie: string | null, id: string) {
-  const html = await (await fetch(`${APP_URL}/p/${id}`, { headers: cookie ? { cookie } : {} })).text();
+  const res = await fetch(`${APP_URL}/p/${id}`, { headers: cookie ? { cookie } : {}, redirect: "manual" });
+  const html = await res.text();
+  const to = new URL(res.headers.get("location") ?? "/", APP_URL);
   // The rendered case is an HTML attribute: data-view="full". The not-found page is the exception: a
   // notFound() inside <Suspense> arrives only in the streamed page data. That data also carries the
   // not-found page as a fallback on EVERY /p page, so it only counts when nothing was rendered.
   const rendered = html.match(/data-view="([a-z_]+)"/)?.[1];
   const notFound = html.includes(String.raw`\"data-view\":\"not_found\"`);
-  return { view: rendered ?? (notFound ? "not_found" : null), html };
+  return { view: rendered ?? (notFound ? "not_found" : null), html, status: res.status, location: to.pathname + to.search };
 }
 
 test("a company and the admin see the full profile", async () => {
@@ -49,21 +53,19 @@ test("a company and the admin see the full profile", async () => {
   }
 });
 
-test("the candidate sees their own profile, with Edit", async () => {
-  const { view, html } = await open(owner.cookie, publicId);
-  assert.equal(view, "own");
-  assert.ok(html.includes(PHONE));
-});
-
-test("anyone else gets the message and none of the profile's data", async () => {
-  for (const cookie of [null, other.cookie]) {
-    const { view, html } = await open(cookie, publicId);
-    assert.equal(view, "gate");
-    assert.ok(!html.includes(PHONE) && !html.includes(example.basics.email), "no profile data in the page");
+test("anyone else is sent away before the page, with none of the profile's data", async () => {
+  const cases: [string | null, string][] = [
+    [null, "/company/login"], // logged out
+    [owner.cookie, "/candidate"], // the candidate themselves: no "own" view (Ahmed's review on #37)
+    [other.cookie, "/candidate"], // another candidate
+    [disabledCompany.cookie, "/company/login?error=disabled"],
+  ];
+  for (const [cookie, to] of cases) {
+    const { status, location, html } = await open(cookie, publicId);
+    assert.equal(status, 307);
+    assert.equal(location, to);
+    assert.ok(!html.includes(PHONE) && !html.includes(example.basics.email), "no profile data in the answer");
   }
-  const off = await open(disabledCompany.cookie, publicId);
-  assert.equal(off.view, "disabled");
-  assert.ok(!off.html.includes(PHONE), "a disabled company gets no profile data either");
 });
 
 test("an unknown or hidden profile is not found for a company; the admin still sees a hidden one", async () => {
@@ -73,6 +75,6 @@ test("an unknown or hidden profile is not found for a company; the admin still s
   assert.equal(hidden.view, "not_found");
   assert.ok(!hidden.html.includes("+216 99 999 999"));
   assert.equal((await open(boss.cookie, hiddenId)).view, "full");
-  // Logged out, an unknown link looks exactly like a real one: nobody learns which links exist.
-  assert.equal((await open(null, "AAAAAAAAAAAAAAAAAAAAAA")).view, "gate");
+  // Logged out, an unknown link gets the same redirect as a real one: nobody learns which links exist.
+  assert.equal((await open(null, "AAAAAAAAAAAAAAAAAAAAAA")).location, "/company/login");
 });

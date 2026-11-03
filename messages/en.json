@@ -513,12 +513,6 @@
       "text": "This link doesn't lead to any profile. It may have been deleted or typed wrong.",
       "back": "Back to the CVs"
     },
-    "own": {
-      "banner": "This is your profile as companies see it.",
-      "edit": "Edit my profile",
-      "hidden": "Your profile is hidden: companies can't see it right now.",
-      "draft": "Your profile isn't approved yet: companies can't see it."
-    },
     "downloadPdf": "Download PDF",
     "pdfSoon": "PDF download is coming soon.",
     "backToCvs": "Back to the CVs",

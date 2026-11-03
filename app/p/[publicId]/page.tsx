@@ -1,8 +1,8 @@
-// S2-11 · /p/<public_id> — what a candidate's QR code opens. Four cases (lib/profile/view.ts decides,
+// S2-11 · /p/<public_id> — what a candidate's QR code opens. Three cases (lib/profile/view.ts decides,
 // on the server, before any profile is read):
 //   an active company or the admin → the full profile, with "Download PDF" (S3-03);
-//   the candidate themselves       → their own profile, with "Edit my profile";
-//   anyone else                    → "only visible to companies registered for the fair" + login;
+//   anyone else                    → "only visible to companies registered for the fair" + login
+//                                    (the proxy normally redirects them before this page);
 //   an unknown public_id           → the not-found page (for those allowed to look profiles up).
 // Reading the session needs the login cookie, so it all sits inside <Suspense> (CLAUDE.md rule 11).
 // That also means a not-found answer is streamed with status 200 and a noindex tag, as Next.js does
@@ -11,14 +11,12 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { DownloadIcon, LockIcon, PencilIcon } from "lucide-react";
+import { DownloadIcon, LockIcon } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { PageContainer } from "@/components/site/page-container";
 import { CompanyProfileView } from "@/components/profile/company-profile-view";
 import { loadProfileView } from "@/lib/profile/view";
 
-// Where "Edit my profile" leads: the candidate's profile editor (docs/ACCESS.md lists it, S2-01).
-const EDIT_URL = "/candidate/profile/edit";
 const COMPANY_LOGIN = "/company/login";
 
 // Not indexed by search engines, whoever opens it: these are people's CVs.
@@ -59,28 +57,6 @@ async function Profile({ params }: { params: PageProps<"/p/[publicId]">["params"
           <Link href="/" className={buttonVariants({ variant: "outline" })}>{t("gate.home")}</Link>
         </div>
       </section>
-    );
-  }
-
-  if (view.kind === "own") {
-    const { profile } = view;
-    return (
-      <div data-view="own" className="flex flex-col gap-4">
-        <div role="status" className="rounded-xl border border-primary/30 bg-secondary p-4 text-sm">
-          <p className="font-medium">{t("own.banner")}</p>
-          {profile.status !== "approved" && <p className="text-muted-foreground">{t("own.draft")}</p>}
-          {profile.status === "approved" && profile.hidden && <p className="text-muted-foreground">{t("own.hidden")}</p>}
-        </div>
-        <CompanyProfileView
-          profile={profile}
-          actions={
-            <Link href={EDIT_URL} className={buttonVariants()}>
-              <PencilIcon data-icon="inline-start" aria-hidden="true" />
-              {t("own.edit")}
-            </Link>
-          }
-        />
-      </div>
     );
   }
 
