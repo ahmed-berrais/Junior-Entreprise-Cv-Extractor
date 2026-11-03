@@ -9,7 +9,7 @@ async function AdminSessionGate({ children }: { children: ReactNode }) {
     // Protected admin pages (/admin, /admin/companies, /admin/candidates) redirect via proxy.ts and page checks.
     return <>{children}</>;
   }
-  return <AdminLayoutShell userEmail={user.email}>{children}</AdminLayoutShell>;
+  return <AdminLayoutShell>{children}</AdminLayoutShell>;
 }
 
 export default function AdminLayout({ children }: { children: ReactNode }) {

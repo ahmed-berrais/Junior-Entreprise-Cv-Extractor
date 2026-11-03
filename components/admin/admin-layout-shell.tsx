@@ -1,45 +1,20 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { LayoutDashboard, Building2, Users, LogOut, ShieldCheck } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { LayoutDashboard, Building2, Users } from "lucide-react";
 import { cn } from "cn";
 
-export function AdminLayoutShell({
-  children,
-  userEmail,
-}: {
-  children: ReactNode;
-  userEmail?: string;
-}) {
+export function AdminLayoutShell({ children }: { children: ReactNode }) {
   const t = useTranslations("admin");
   const rawPathname = usePathname();
   const pathname = rawPathname ?? "";
-  const router = useRouter();
-  const [loggingOut, setLoggingOut] = useState(false);
 
-  // When on the admin login page, never render the admin header or sidebar
+  // When on the admin login page, never render the admin navigation
   if (pathname.endsWith("/admin/login") || pathname.includes("/admin/login")) {
     return <>{children}</>;
-  }
-
-  async function handleLogout() {
-    if (loggingOut) return;
-    setLoggingOut(true);
-    try {
-      await fetch("/api/candidate/auth", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "logout" }),
-      });
-    } catch {
-      // Continue navigation even on transient network error
-    }
-    router.replace("/admin/login");
-    router.refresh();
   }
 
   const navItems = [
@@ -65,40 +40,6 @@ export function AdminLayoutShell({
 
   return (
     <div className="flex flex-1 flex-col w-full max-w-full overflow-x-hidden bg-background">
-      {/* Admin Top Header */}
-      <header className="border-b bg-card/80 backdrop-blur-sm sticky top-0 z-20">
-        <div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between px-3 sm:px-6">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-              <ShieldCheck className="size-5" />
-            </div>
-            <div className="flex flex-col min-w-0">
-              <span className="text-base sm:text-lg font-heading font-bold leading-tight truncate">
-                {t("header.title")}
-              </span>
-              {userEmail && (
-                <span className="hidden sm:inline text-xs text-muted-foreground truncate max-w-56">
-                  {userEmail}
-                </span>
-              )}
-            </div>
-          </div>
-
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            disabled={loggingOut}
-            onClick={handleLogout}
-            className="min-h-[44px] px-3 sm:px-4 text-xs sm:text-sm font-medium gap-2 text-destructive hover:text-destructive hover:bg-destructive/10"
-            aria-label={t("header.logout")}
-          >
-            <LogOut className="size-4 shrink-0" />
-            <span>{loggingOut ? t("header.loggingOut") : t("header.logout")}</span>
-          </Button>
-        </div>
-      </header>
-
       {/* Mobile Navigation Bar (< md) */}
       <div className="block md:hidden border-b bg-card/50 p-2 sm:p-3">
         <nav
