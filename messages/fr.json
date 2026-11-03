@@ -498,5 +498,13 @@
     "deleteBusy": "Suppression…",
     "deleteFailed": "Impossible de supprimer votre compte. Aucune suppression n’a été confirmée. Veuillez réessayer.",
     "deleteCancel": "Annuler"
+  },
+  "admin": {
+    "nav": {
+      "ariaLabel": "Navigation administrateur",
+      "overview": "Vue d’ensemble",
+      "companies": "Entreprises",
+      "candidates": "Candidats"
+    }
   }
 }

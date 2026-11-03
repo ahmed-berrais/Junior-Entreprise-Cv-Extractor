@@ -498,5 +498,13 @@
     "deleteBusy": "Deleting…",
     "deleteFailed": "Unable to delete your account. Nothing has been confirmed deleted. Please try again.",
     "deleteCancel": "Cancel"
+  },
+  "admin": {
+    "nav": {
+      "ariaLabel": "Admin navigation",
+      "overview": "Overview",
+      "companies": "Companies",
+      "candidates": "Candidates"
+    }
   }
 }
