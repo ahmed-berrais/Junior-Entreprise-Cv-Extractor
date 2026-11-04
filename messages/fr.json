@@ -498,5 +498,62 @@
     "deleteBusy": "Suppression…",
     "deleteFailed": "Impossible de supprimer votre compte. Aucune suppression n’a été confirmée. Veuillez réessayer.",
     "deleteCancel": "Annuler"
+  },
+  "profilePage": {
+    "loading": "Chargement du profil…",
+    "gate": {
+      "title": "Ce profil n'est visible que par les entreprises inscrites au salon",
+      "text": "Si votre entreprise participe au salon de l'emploi Pristini JE, connectez-vous avec les accès envoyés par le club.",
+      "login": "Connexion entreprise",
+      "home": "Retour à l'accueil"
+    },
+    "disabled": "Ce compte entreprise a été désactivé. Contactez le club Pristini JE si vous pensez que c'est une erreur.",
+    "notFound": {
+      "title": "Profil introuvable",
+      "text": "Ce lien ne mène à aucun profil. Il a peut-être été supprimé ou mal recopié.",
+      "back": "Retour aux CV"
+    },
+    "downloadPdf": "Télécharger le PDF",
+    "pdfSoon": "Le téléchargement en PDF arrive bientôt.",
+    "backToCvs": "Retour aux CV",
+    "contact": "Contact",
+    "email": "E-mail",
+    "phone": "Téléphone",
+    "location": "Lieu",
+    "links": "Liens",
+    "availability": "Disponible",
+    "lookingFor": "Recherche",
+    "lookingForValues": {
+      "pfe": "PFE",
+      "internship": "Stage",
+      "job": "Emploi"
+    },
+    "about": "À propos",
+    "education": "Formation",
+    "experience": "Expérience",
+    "projects": "Projets",
+    "skills": "Compétences",
+    "languages": "Langues",
+    "certifications": "Certifications",
+    "current": "aujourd'hui",
+    "technologies": "Technologies",
+    "openProject": "Ouvrir le projet",
+    "grade": "Mention",
+    "experienceTypes": {
+      "internship": "Stage",
+      "job": "Emploi",
+      "freelance": "Freelance",
+      "volunteer": "Bénévolat",
+      "other": "Autre"
+    },
+    "levels": {
+      "native": "Langue maternelle",
+      "fluent": "Courant",
+      "advanced": "Avancé",
+      "intermediate": "Intermédiaire",
+      "basic": "Notions"
+    },
+    "yearsExperience": "{years, plural, =0 {Pas encore d'expérience professionnelle} one {# an d'expérience} other {# ans d'expérience}}",
+    "approvedOn": "Profil validé le {date}"
   }
 }
