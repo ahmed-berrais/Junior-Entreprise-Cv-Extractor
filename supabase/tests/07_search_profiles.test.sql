@@ -5,7 +5,7 @@
 -- `python -m cv_worker.check_search` (worker/README.md).
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(25);
+select plan(29);
 
 -- A unit vector spread over the given topic dimensions.
 create function pg_temp.vec(variadic dims int[]) returns extensions.vector
@@ -206,6 +206,16 @@ select is((select max(total_count)::int from public.search_profiles('', null, '{
 select is(pg_temp.names('', null, '{}', 2), '{}'::text[], 'page 2 is empty with 16 results (20 per page)');
 select throws_ok($$select * from public.search_profiles('x', null, '{"domain": ["data_ai"]}')$$, '22023', null,
   'a misspelt filter is an error, never silently ignored');
+
+-- ── words with symbols ──
+update public.profiles set data = jsonb_set(data, '{skills}', data -> 'skills' || '[{"name": "C++", "category": "technical"}]')
+ where user_id = pg_temp.uid(2);
+update public.profiles set data = jsonb_set(data, '{skills}', data -> 'skills' || '[{"name": "C#", "category": "technical"}]')
+ where user_id = pg_temp.uid(4);
+select is(pg_temp.names('C++'), array['Mehdi Gharbi'], 'C++ finds C++, not C or C#');
+select is(pg_temp.names('C#'), array['Karim Jlassi'], 'C# finds C#, not C or C++');
+select is(pg_temp.names('Node.js, C++'), array['Mehdi Gharbi'], 'a symbol word is found next to punctuation');
+select ok(cardinality(pg_temp.names('C')) >= 3, 'C alone still finds C, C++ and C#');
 
 -- ── who can run it ───────────────────────────────────────────────────────
 select is(has_function_privilege('anon', 'public.search_profiles(text, extensions.vector, jsonb, int)', 'execute'), false,
