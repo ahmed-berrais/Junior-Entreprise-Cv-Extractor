@@ -8,7 +8,8 @@ import pytest
 from cv_worker import usage
 from cv_worker.ai.embed import embed
 from cv_worker.extract import extract_cv
-from tests.test_embed import FakeGemini as FakeEmbed, embedding_ok, gemini_error
+from tests.test_embed import FakeGemini as FakeEmbed
+from tests.test_embed import embedding_ok, gemini_error
 from tests.test_fallback import FALLBACK, MAIN, FakeGemini, error, ok
 
 
