@@ -53,6 +53,14 @@
       "failed": "Impossible de terminer votre demande. Veuillez réessayer."
     }
   },
+  "usage": {
+    "title": "Quotas gratuits utilisés aujourd'hui",
+    "since": "Depuis 9 h (heure de Tunisie), quand les quotas quotidiens de Gemini repartent à zéro. Orange dès 70 % d'une limite, rouge dès 90 %.",
+    "ofLimit": "{n} / {limit}",
+    "warning": "Proche de la limite",
+    "danger": "Limite presque atteinte",
+    "failed": "Impossible de charger l'utilisation du jour."
+  },
   "placeholder": {
     "candidate": "Espace candidat — inscription, dépôt et vérification du CV ici (S1-26 → S1-32)",
     "company": "Espace entreprise — CV, recherche et scan QR ici (Sprint 2)",

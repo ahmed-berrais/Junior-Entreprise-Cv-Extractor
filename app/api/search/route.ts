@@ -9,7 +9,8 @@
 import { getCurrentUser } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { parseSearchParams } from "@/lib/search/params";
-import { embedQuery } from "@/lib/search/embed-query";
+import { embedModel, embedQuery } from "@/lib/search/embed-query";
+import { countUsage } from "@/lib/usage";
 import { runSearch, SearchFailed } from "@/lib/search/run-search";
 
 const error = (status: number, code: string, extra: object = {}) =>
@@ -26,7 +27,11 @@ export async function GET(request: Request) {
   const supabase = await createClient();
   try {
     const result = await runSearch(parsed.value, {
-      embed: (text) => embedQuery(text),
+      // Counted before the call: a failed or timed-out request still uses Gemini's quota (S3-10).
+      embed: async (text) => {
+        await countUsage(embedModel());
+        return embedQuery(text);
+      },
       search: (args) => supabase.rpc("search_profiles", args),
     });
     return Response.json(result);

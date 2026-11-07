@@ -9,6 +9,7 @@ import os
 import sys
 import time
 
+from cv_worker import usage
 from cv_worker.extract_one import load_env_file
 from cv_worker.jobs import SupabaseStore, process_ready, run_pending
 
@@ -29,6 +30,7 @@ def main() -> int:
         return 2
 
     store = SupabaseStore.from_env()
+    usage.install(store.count_usage)  # S3-10: every Gemini call is counted for the admin overview
     print("worker started", flush=True)
     if "--once" in sys.argv:
         run_pending(store)

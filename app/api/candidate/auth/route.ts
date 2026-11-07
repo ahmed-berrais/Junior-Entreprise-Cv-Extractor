@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { AUTH_ACTIONS, authErrorCode, validateAuth, type AuthAction } from "@/lib/candidate-auth";
 import { loadCandidateState, nextStep } from "@/lib/candidate/next-step";
+import { countUsage } from "@/lib/usage";
 
 export async function POST(request: NextRequest) {
   // Reject cross-site requests before touching cookies or sending email.
@@ -33,12 +34,15 @@ export async function POST(request: NextRequest) {
       // Always show the confirmation message; even projects with confirmation off
       // must not accidentally leave signup as an implicit login.
       if (data.session) await supabase.auth.signOut({ scope: "local" });
+      else await countUsage("email:auth");  // no session = Supabase sent a confirmation email (S3-10)
       return NextResponse.json({ message: "checkEmail" });
     }
     if (action === "forgot") {
       callback.searchParams.set("flow", "recovery");
       const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: callback.toString() });
       if (error) return failure(error);
+      // shortcut: Supabase answers OK for an unknown email too (no email sent), so a typo is counted.
+      await countUsage("email:auth");
       return NextResponse.json({ message: "resetEmail" });
     }
     if (action === "logout") {

@@ -53,6 +53,14 @@
       "failed": "We couldn’t complete your request. Please try again."
     }
   },
+  "usage": {
+    "title": "Free quotas used today",
+    "since": "Since 9:00 Tunisia time, when Gemini's daily quotas reset. Orange from 70% of a limit, red from 90%.",
+    "ofLimit": "{n} / {limit}",
+    "warning": "Close to the limit",
+    "danger": "Limit almost reached",
+    "failed": "Couldn't load today's usage."
+  },
   "placeholder": {
     "candidate": "Candidate space — sign-up, upload and review go here (S1-26 → S1-32)",
     "company": "Company space — CVs, search and QR scan go here (Sprint 2)",

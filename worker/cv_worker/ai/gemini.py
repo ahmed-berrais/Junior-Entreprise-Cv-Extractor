@@ -23,6 +23,7 @@ import httpx  # the HTTP library used by google-genai
 from google import genai
 from google.genai import errors, types
 
+from cv_worker import usage
 from cv_worker.ai.errors import (
     AiTimeout,
     ConfigError,
@@ -136,6 +137,7 @@ def extract_profile(
         error, status = e.code, e.status
         raise
     finally:
+        usage.count(model)
         log.info(
             json.dumps(
                 {

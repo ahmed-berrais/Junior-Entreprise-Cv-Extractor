@@ -32,6 +32,18 @@ Limits are per Google Cloud project, not per key. Requests per day reset at midn
 | `gemini-3.5-flash` | extraction (fallback) | 5 | 20 (counted on `gemini-3.6-flash`) | 250,000 |
 | `gemini-embedding-001` | embeddings (S1-33, search) | 100 | 1,000 | 30,000 |
 
+## Watching the counts (S3-10)
+
+`/admin` shows today's count for each model and email kind next to the limits above, orange from
+70% and red from 90%. Every request sent is counted, failed ones too, in `usage_counters`: the
+worker's Gemini calls (`worker/cv_worker/usage.py`), search embeddings, company access emails and
+the candidate sign-up / password-reset emails. "Today" starts at 9:00 Tunis time, with Google's day.
+The limits on the page are in `lib/usage-limits.ts`: change them with this file.
+
+Candidate emails (`email:auth`) are sent by Supabase Auth, with whatever SMTP the project has set.
+Supabase's built-in email service allows only a few emails an hour, so check that the production
+project uses its own SMTP before uploads open; the panel shows their count without a limit.
+
 ## How many calls we make
 
 | Event | Calls |
