@@ -114,6 +114,17 @@ to read an approved profile row would also read any column on it, including an u
 | `started_at`, `finished_at` | When the worker started and finished it |
 | `created_at`, `updated_at` | As above. Jobs are handled oldest first |
 
+## usage_counters (S3-10)
+
+How many AI calls and emails were made each day, so the admin sees a free limit coming. No policy
+and no browser grant: only the server reads and writes it.
+
+| Column | What it holds |
+|---|---|
+| `day` | Google's day (midnight Pacific = 9:00 in Tunis), when Gemini's daily quotas reset |
+| `kind` | A model name (`gemini-3.5-flash-lite`, `gemini-embedding-001`…) or `email:company` / `email:auth` |
+| `n` | How many requests were sent that day, failed ones included |
+
 ## The server's functions (never the browser)
 
 | Function | What it does |
@@ -122,6 +133,8 @@ to read an approved profile row would also read any column on it, including an u
 | `requeue_stuck_jobs()` | Run when the worker starts: jobs cut off by a crash go back to `queued`, or fail if they already had 3 attempts |
 | `leftover_rows(user_id)` | The deletion check (S2-16): for every table pointing at `auth.users`, how many rows still belong to this user |
 | `approve_profile(user_id, data, draft_updated_at)` | Approval in one step (S1-32): deletes the draft, copies the checked data and its `looking_for` into `profiles`, sets `approved` and `approved_at`, queues an `embed` job. If the draft changed since the candidate reviewed it, it does nothing and returns `null`. Returns the `public_id` |
+| `count_usage(kind)` | S3-10: adds 1 to today's count of one AI model or email kind, in `usage_counters` |
+| `usage_today()` | S3-10: today's counts, for the "Free quotas used today" panel on `/admin` |
 
 Only the server (the service role key) can run them. For `approve_profile` that matters most: a
 candidate who could call it could approve any data, skipping the schema check

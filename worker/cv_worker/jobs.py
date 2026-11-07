@@ -113,6 +113,9 @@ class SupabaseStore:
             "finished_at": datetime.now(UTC).isoformat(),
         }).eq("id", job_id).execute()
 
+    def count_usage(self, kind: str) -> None:
+        self.db.rpc("count_usage", {"p_kind": kind}).execute()
+
     def try_later(self, job_id: str, seconds: float) -> None:
         run_after = datetime.now(UTC) + timedelta(seconds=seconds)
         self.db.table("extraction_jobs").update({

@@ -12,13 +12,15 @@ export const EMBED_TIMEOUT_MS = 3000;
 
 export class EmbedFailed extends Error {}
 
+export const embedModel = () => process.env.GEMINI_EMBED_MODEL || "gemini-embedding-001";
+
 export async function embedQuery(
   text: string,
   { fetchFn = fetch, timeoutMs = EMBED_TIMEOUT_MS }: { fetchFn?: typeof fetch; timeoutMs?: number } = {},
 ): Promise<number[]> {
   const key = process.env.GEMINI_API_KEY;
   if (!key) throw new EmbedFailed("GEMINI_API_KEY is not set");
-  const model = process.env.GEMINI_EMBED_MODEL || "gemini-embedding-001";
+  const model = embedModel();
 
   let response: Response;
   try {

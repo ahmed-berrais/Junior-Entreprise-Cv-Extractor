@@ -30,6 +30,7 @@ import httpx
 from google import genai
 from google.genai import errors, types
 
+from cv_worker import usage
 from cv_worker.ai.errors import (
     AiTimeout,
     ExtractionFailed,
@@ -141,6 +142,7 @@ def _embed_once(client: genai.Client, model: str, text: str, task: str, timeout_
         error, status = e.code, e.status
         raise
     finally:
+        usage.count(model)
         log.info(
             json.dumps(
                 {
