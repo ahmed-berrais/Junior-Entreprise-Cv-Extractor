@@ -16,6 +16,15 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { PageContainer } from "@/components/site/page-container";
 import { CompanyProfileView } from "@/components/profile/company-profile-view";
 import { loadProfileView } from "@/lib/profile/view";
+import { createClient } from "@/lib/supabase/server";
+import { ShortlistBox } from "@/components/company/shortlist-box";
+
+// S3-05 · This company's shortlist row for the profile, if any (its own client: RLS shows only its rows).
+async function shortlistRow(publicId: string) {
+  const { data } = await (await createClient()).from("shortlists")
+    .select("note, profiles!inner(public_id)").eq("profiles.public_id", publicId).maybeSingle();
+  return data ? { note: data.note as string } : null;
+}
 
 const COMPANY_LOGIN = "/company/login";
 
@@ -67,6 +76,7 @@ async function Profile({ params }: { params: PageProps<"/p/[publicId]">["params"
         className="w-fit text-sm text-primary underline-offset-4 hover:underline">
         ← {t("backToCvs")}
       </Link>
+      {view.viewer === "company" && <ShortlistBox publicId={publicId} initial={await shortlistRow(publicId)} />}
       <CompanyProfileView
         profile={view.profile}
         actions={

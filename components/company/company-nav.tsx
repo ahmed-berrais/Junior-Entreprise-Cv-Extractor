@@ -1,13 +1,13 @@
 "use client";
 // S2-08 · The company space's navigation: CVs, Scan QR, My company, plus the company name and logout.
-// Phone: a bottom bar with the three icons, in reach of the thumb (Ahmed's note: the Scan button
+// Phone: a bottom bar with the icons, in reach of the thumb (Ahmed's note: the Scan button
 // must be one tap away). Laptop (≥ 640 px): a bar under the site header. Same links in both.
 // The admin may browse the CVs too (companyName = null): they get the CVs and a way back to their
 // dashboard, not Scan or My company, which the proxy keeps for companies.
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { BuildingIcon, FilesIcon, LayoutDashboardIcon, LogOutIcon, ScanLineIcon } from "lucide-react";
+import { BuildingIcon, FilesIcon, LayoutDashboardIcon, LogOutIcon, ScanLineIcon, StarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { logOut } from "@/lib/log-out";
 import { cn } from "cn";
@@ -15,6 +15,7 @@ import { cn } from "cn";
 const LINKS = [
   { key: "cvs", href: "/company/cvs", Icon: FilesIcon },
   { key: "scan", href: "/company/scan", Icon: ScanLineIcon },
+  { key: "shortlist", href: "/company/shortlist", Icon: StarIcon },
   { key: "myCompany", href: "/company/my-company", Icon: BuildingIcon },
 ] as const;
 
@@ -74,7 +75,7 @@ export function CompanyNav({ companyName }: { companyName: string | null }) {
         data-slot="company-bottom-nav"
         className="fixed inset-x-0 bottom-0 z-40 border-t bg-card pb-[env(safe-area-inset-bottom)] sm:hidden"
       >
-        <ul className={cn("grid", links.length === 3 ? "grid-cols-3" : "grid-cols-2")}>
+        <ul className={cn("grid", links.length === 4 ? "grid-cols-4" : "grid-cols-2")}>
           {links.map(({ key, href, Icon }) => (
             <li key={key}>
               <Link

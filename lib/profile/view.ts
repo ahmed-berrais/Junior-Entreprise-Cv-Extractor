@@ -32,7 +32,7 @@ export type ProfileView =
   | { kind: "gate" };
 
 // public_id is 22 URL-safe characters (new_public_id() in the database). Anything else can't exist.
-const PUBLIC_ID = /^[A-Za-z0-9_-]{22}$/;
+export const PUBLIC_ID = /^[A-Za-z0-9_-]{22}$/;
 const COLUMNS = "public_id, status, hidden, looking_for, approved_at, data";
 
 export async function loadProfileView(publicId: string): Promise<ProfileView> {

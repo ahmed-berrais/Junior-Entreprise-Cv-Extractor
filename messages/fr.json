@@ -503,6 +503,7 @@
       "label": "Espace entreprise",
       "cvs": "CV",
       "scan": "Scanner QR",
+      "shortlist": "Sélection",
       "myCompany": "Mon entreprise",
       "adminHome": "Admin"
     },
@@ -596,5 +597,22 @@
     },
     "yearsExperience": "{years, plural, =0 {Pas encore d'expérience professionnelle} one {# an d'expérience} other {# ans d'expérience}}",
     "approvedOn": "Profil validé le {date}"
+  },
+  "shortlist": {
+    "title": "Sélection",
+    "pageTitle": "Ma sélection",
+    "add": "Ajouter à ma sélection",
+    "listed": "Dans votre sélection",
+    "remove": "Retirer",
+    "noteLabel": "Note privée (visible uniquement par votre entreprise)",
+    "notePlaceholder": "ex. Très bon CV, rappeler pour un entretien",
+    "saveNote": "Enregistrer la note",
+    "saved": "Enregistré.",
+    "removed": "Retiré de votre sélection.",
+    "error": "L'enregistrement a échoué. Réessayez.",
+    "empty": "Personne dans votre sélection pour l'instant. Ouvrez le profil d'un candidat et touchez « Ajouter à ma sélection ».",
+    "browse": "Parcourir les CV",
+    "noName": "Nom non renseigné",
+    "loadError": "Votre sélection n'a pas pu être chargée. Rechargez la page."
   }
 }
