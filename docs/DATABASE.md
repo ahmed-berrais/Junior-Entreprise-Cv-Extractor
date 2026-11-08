@@ -30,9 +30,9 @@ The role comes from `app_metadata.role` in the login token, which only the serve
 |---|---|---|
 | **Logged out** | nothing | nothing |
 | **Candidate** | their own profile, draft and jobs | their profile's `looking_for` and `hidden`; their draft's `data` (the review form) |
-| **Company** (active) | approved, non-hidden profiles; their own company row | their company's name, sector, description, website, logo |
+| **Company** (active) | approved, non-hidden profiles; their own company row; their own shortlist | their company's name, sector, description, website, logo; their shortlist and its notes (S3-05) |
 | **Company** (disabled, or no company row) | their own company row only, no profiles | same as above |
-| **Admin** | everything | nothing from the browser: admin actions go through server code |
+| **Admin** | everything except companies' shortlists (private notes) | nothing from the browser: admin actions go through server code |
 | **Server** (service role key) | everything | everything. That's why that key never leaves the server |
 
 Everything else goes through server code that checks first: approving (the schema is
@@ -97,6 +97,21 @@ to read an approved profile row would also read any column on it, including an u
 | `name`, `sector`, `description`, `website`, `logo_url` | The "My company" page. The company edits these |
 | `disabled` | Set by the admin. A disabled company can no longer see any profile |
 | `created_at`, `updated_at` | As above |
+
+## shortlists (S3-05)
+
+A company's shortlist, with a private note per candidate. Only that company reads or changes its rows: not another
+company, not the candidate, not the admin. A disabled company reads nothing.
+
+| Column | What it holds |
+|---|---|
+| `company_id`, `profile_id` | The company and the profile (primary key together: one row per pair). Deleting either removes the row |
+| `note` | The company's private note, 1,000 characters at most. Empty by default |
+| `created_at`, `updated_at` | When it was shortlisted, and when the note last changed |
+
+A company can only shortlist a profile it may see (approved, not hidden). The app writes with the company's own
+client (`/api/company/shortlist/<public_id>`), so the policies are the whole lock; it may update `note` and
+`updated_at` only, never move a row to another company or profile.
 
 ## extraction_jobs
 

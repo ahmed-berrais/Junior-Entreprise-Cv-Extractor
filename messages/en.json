@@ -55,7 +55,6 @@
   },
   "placeholder": {
     "candidate": "Candidate space — sign-up, upload and review go here (S1-26 → S1-32)",
-    "company": "Company space — CVs, search and QR scan go here (Sprint 2)",
     "admin": "Admin dashboard — companies and statistics go here (Sprint 2)",
     "home": "CV Extractor — landing page (S1-25)"
   },
@@ -498,5 +497,122 @@
     "deleteBusy": "Deleting…",
     "deleteFailed": "Unable to delete your account. Nothing has been confirmed deleted. Please try again.",
     "deleteCancel": "Cancel"
+  },
+  "company": {
+    "nav": {
+      "label": "Company space",
+      "cvs": "CVs",
+      "scan": "Scan QR",
+      "shortlist": "Shortlist",
+      "myCompany": "My company",
+      "adminHome": "Admin"
+    },
+    "logOut": "Log out",
+    "loading": "Loading…",
+    "notCompany": "This space is for companies taking part in the fair. Log in with the access the club sent you.",
+    "disabled": "This company account has been turned off. Contact the Pristini JE club if you think it's a mistake.",
+    "noRow": "Your company account isn't set up yet. Contact the Pristini JE club.",
+    "pages": {
+      "scan": {
+        "title": "Scan QR",
+        "soon": "Scan a candidate's QR code at the fair to open their profile (S3-01)."
+      },
+      "myCompany": {
+        "title": "My company",
+        "soon": "Your company's name, sector, description, website and logo will be edited here (S2-09)."
+      }
+    },
+    "cvs": {
+      "title": "CVs",
+      "intro": "Every approved candidate, newest first. Open a card to see the full profile.",
+      "count": "{count, plural, =0 {No profiles yet} one {# profile} other {# profiles}}",
+      "empty": "No profiles yet",
+      "emptyHint": "Candidates appear here as soon as they approve their profile. Come back a little later.",
+      "error": "The profiles couldn't be loaded.",
+      "retry": "Try again",
+      "loadMore": "Show more",
+      "end": "That's everyone for now.",
+      "loading": "Loading profiles…",
+      "noName": "Name not given",
+      "openProfile": "Open {name}'s profile",
+      "skills": "Top skills",
+      "email": "Email",
+      "city": "City"
+    },
+    "adminTitle": "Administrator"
+  },
+  "profilePage": {
+    "loading": "Loading the profile…",
+    "gate": {
+      "title": "This profile is only visible to companies registered for the fair",
+      "text": "If your company takes part in the Pristini JE job fair, log in with the access the club sent you.",
+      "login": "Company login",
+      "home": "Back to the home page"
+    },
+    "disabled": "This company account has been turned off. Contact the Pristini JE club if you think it's a mistake.",
+    "notFound": {
+      "title": "Profile not found",
+      "text": "This link doesn't lead to any profile. It may have been deleted or typed wrong.",
+      "back": "Back to the CVs"
+    },
+    "downloadPdf": "Download PDF",
+    "pdfSoon": "PDF download is coming soon.",
+    "backToCvs": "Back to the CVs",
+    "contact": "Contact",
+    "email": "Email",
+    "phone": "Phone",
+    "location": "Location",
+    "links": "Links",
+    "availability": "Available",
+    "lookingFor": "Looking for",
+    "lookingForValues": {
+      "pfe": "PFE",
+      "internship": "Internship",
+      "job": "Job"
+    },
+    "about": "About",
+    "education": "Education",
+    "experience": "Experience",
+    "projects": "Projects",
+    "skills": "Skills",
+    "languages": "Languages",
+    "certifications": "Certifications",
+    "current": "present",
+    "technologies": "Technologies",
+    "openProject": "Open the project",
+    "grade": "Grade",
+    "experienceTypes": {
+      "internship": "Internship",
+      "job": "Job",
+      "freelance": "Freelance",
+      "volunteer": "Volunteering",
+      "other": "Other"
+    },
+    "levels": {
+      "native": "Native",
+      "fluent": "Fluent",
+      "advanced": "Advanced",
+      "intermediate": "Intermediate",
+      "basic": "Basic"
+    },
+    "yearsExperience": "{years, plural, =0 {No professional experience yet} one {# year of experience} other {# years of experience}}",
+    "approvedOn": "Profile approved on {date}"
+  },
+  "shortlist": {
+    "title": "Shortlist",
+    "pageTitle": "My shortlist",
+    "add": "Add to shortlist",
+    "listed": "On your shortlist",
+    "remove": "Remove",
+    "noteLabel": "Private note (only your company sees it)",
+    "notePlaceholder": "e.g. Great CV, call back for an interview",
+    "saveNote": "Save note",
+    "saved": "Saved.",
+    "removed": "Removed from your shortlist.",
+    "error": "Couldn't save. Please try again.",
+    "empty": "No one on your shortlist yet. Open a candidate's profile and tap “Add to shortlist”.",
+    "browse": "Browse the CVs",
+    "noName": "Name not given",
+    "loadError": "Your shortlist couldn't be loaded. Reload the page."
   }
 }
