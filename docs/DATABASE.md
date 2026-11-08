@@ -114,6 +114,19 @@ to read an approved profile row would also read any column on it, including an u
 | `started_at`, `finished_at` | When the worker started and finished it |
 | `created_at`, `updated_at` | As above. Jobs are handled oldest first |
 
+## profile_events (S3-19)
+
+Which profiles each company opened ("view") or scanned at its stand ("scan"), for the numbers and
+the "last candidates scanned" list in the company space (S3-20). A company reads only its own rows,
+while it's active. Nobody writes from the browser: the server records them with `record_profile_event`.
+
+| Column | What it holds |
+|---|---|
+| `company_id`, `profile_id` | Who looked at whom. Deleting the profile or either account deletes the event |
+| `kind` | `view` (opened the full profile) or `scan` (opened it from the QR scanner) |
+| `day` | The day in Tunisia. A view counts once per company, profile and day (unique index); every scan is kept |
+| `created_at` | When it happened |
+
 ## The server's functions (never the browser)
 
 | Function | What it does |
@@ -122,10 +135,16 @@ to read an approved profile row would also read any column on it, including an u
 | `requeue_stuck_jobs()` | Run when the worker starts: jobs cut off by a crash go back to `queued`, or fail if they already had 3 attempts |
 | `leftover_rows(user_id)` | The deletion check (S2-16): for every table pointing at `auth.users`, how many rows still belong to this user |
 | `approve_profile(user_id, data, draft_updated_at)` | Approval in one step (S1-32): deletes the draft, copies the checked data and its `looking_for` into `profiles`, sets `approved` and `approved_at`, queues an `embed` job. If the draft changed since the candidate reviewed it, it does nothing and returns `null`. Returns the `public_id` |
+| `record_profile_event(company_id, public_id, kind)` | S3-19: records a `view` or `scan`. The server passes the company from the login session. Records nothing for a disabled company, a draft or hidden profile, or a repeated view the same day; returns whether a row was added |
 
 Only the server (the service role key) can run them. For `approve_profile` that matters most: a
 candidate who could call it could approve any data, skipping the schema check
 (`supabase/tests/05_approve_profile.test.sql`).
+
+`company_stats()` (S3-19) is the exception: the logged-in company calls it with its own session and
+the access rules decide what it sees. It returns `views_today`, `scans_today` (since midnight,
+Tunisia time) and `last_scanned`: the 10 profiles scanned most recently, newest first, with
+`public_id`, name, school and time. Anyone else gets zeros and an empty list.
 
 ## Search: `search_profiles` (S2-12)
 
