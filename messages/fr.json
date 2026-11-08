@@ -499,6 +499,16 @@
     "deleteCancel": "Annuler"
   },
   "company": {
+    "today": {
+      "title": "Aujourd'hui",
+      "viewsToday": "CV consultés aujourd'hui",
+      "scansToday": "Scans aujourd'hui",
+      "lastScanned": "Derniers candidats scannés",
+      "empty": "Aucun scan pour l'instant aujourd'hui. Scannez le code QR d'un candidat à votre stand.",
+      "scan": "Scanner un code QR",
+      "noName": "Nom non renseigné",
+      "error": "Les chiffres du jour n'ont pas pu être chargés. Rechargez la page."
+    },
     "nav": {
       "label": "Espace entreprise",
       "cvs": "CV",

@@ -499,6 +499,16 @@
     "deleteCancel": "Cancel"
   },
   "company": {
+    "today": {
+      "title": "Today",
+      "viewsToday": "CVs viewed today",
+      "scansToday": "Scans today",
+      "lastScanned": "Last candidates scanned",
+      "empty": "No scan yet today. Scan a candidate's QR code at your stand.",
+      "scan": "Scan a QR code",
+      "noName": "Name not given",
+      "error": "Today's numbers couldn't be loaded. Reload the page."
+    },
     "nav": {
       "label": "Company space",
       "cvs": "CVs",
