@@ -3,6 +3,7 @@
 // its own events. "Today" starts at midnight Tunisia time, in the database. Reads the login cookie:
 // the company layout already puts every page inside <Suspense>.
 import Link from "next/link";
+import { connection } from "next/server";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { ChevronRightIcon, ScanLineIcon } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
@@ -21,6 +22,7 @@ export async function CompanyToday() {
   if (error || !data) return <p role="alert" className="text-destructive">{t("error")}</p>;
 
   const stats = data as CompanyStats;
+  await connection(); // "now" is per request (Cache Components)
   const now = new Date();
   const tiles = [
     { label: t("viewsToday"), value: stats.views_today },
