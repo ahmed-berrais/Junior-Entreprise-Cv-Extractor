@@ -201,7 +201,7 @@
     "layoutBody": "SiteHeader et SiteFooter sont dans app/layout.tsx : ils apparaissent sur toutes les pages. Mettez le contenu de chaque page dans PageContainer."
   },
   "landing": {
-    "eyebrow": "Salon de l'emploi Pristini JE · mercredi 11 novembre 2026",
+    "eyebrow": "Salon de l'emploi Pristini JE · mercredi 9 décembre 2026",
     "title": "Votre CV prêt pour les recruteurs en quelques minutes",
     "subtitle": "Déposez votre CV, notre IA remplit votre profil, vous le vérifiez et vous recevez un code QR à montrer au salon.",
     "candidate": {
