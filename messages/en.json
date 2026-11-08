@@ -201,7 +201,7 @@
     "layoutBody": "SiteHeader and SiteFooter sit in app/layout.tsx, so they appear on every page. Wrap page content in PageContainer."
   },
   "landing": {
-    "eyebrow": "Pristini JE job fair · Wednesday 11 November 2026",
+    "eyebrow": "Pristini JE job fair · Wednesday 9 December 2026",
     "title": "Your CV, ready for recruiters in minutes",
     "subtitle": "Upload your CV, our AI fills in your profile, you check it and get a QR code to show at the fair.",
     "candidate": {
