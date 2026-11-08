@@ -22,6 +22,18 @@ Key created in Google AI Studio (aistudio.google.com), stored in `.env` as `GEMI
   The free tier can be busy at peak times; the worker returns `provider_error` / `timeout` and the candidate
   sees "We couldn't read your CV right now, please try again later".
 
+## Google Gemini (smart search, S3-04)
+
+Smart search turns a recruiter's sentence into filters with one call to **`gemini-3.5-flash-lite`** (`GEMINI_SEARCH_MODEL`),
+on its own key, **`GEMINI_SEARCH_API_KEY`**, created on 8 Nov in a **separate Google project** ("search"). Gemini replaces
+Nemotron from the task (Ahmed's OK): one provider for the team. Because limits are per project, smart searches never use
+the 500 Flash-Lite requests CV extraction needs: that project has its own 15 a minute and 500 a day.
+
+- Called on Enter only, never while typing. Each smart search also costs the usual embedding call for the text that's left.
+- Over 4 seconds, a 429 or any error: the page searches the sentence as typed. At the busiest minute of the fair some
+  smart searches will fall back that way, which is expected.
+- Measured 8 Nov: 0.7 to 2.7 s per sentence.
+
 ## Per-model limits (free tier, AI Studio → Rate limits, read 29 Oct)
 
 Limits are per Google Cloud project, not per key. Requests per day reset at midnight Pacific time (9:00 in Tunis from November).
@@ -39,6 +51,7 @@ Limits are per Google Cloud project, not per key. Requests per day reset at midn
 | A candidate uploads a CV | 1 extraction call (+1 if the main model fails and the fallback is asked) |
 | A candidate approves their profile | 1 embedding call (the `embed` job, S1-33) |
 | A company searches | 1 embedding call (the query, S2-13) |
+| A company uses smart search | 1 Flash-Lite call on the **search** project (S3-04) + the embedding call above if words are left |
 
 Retries add calls too: the worker puts a busy job back in the queue (S1-24), and `embed()` retries 429, timeouts and 5xx.
 

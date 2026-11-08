@@ -61,8 +61,13 @@ test("search bar and filters", async (suite) => {
 
   let calls: string[] = [];
   let degraded = false;
-  globalThis.fetch = (async (url: string) => {
+  let understood: string | null = null; // S3-04: what POST /api/search/understand answers (null = fallback)
+  globalThis.fetch = (async (url: string, init?: RequestInit) => {
     calls.push(url);
+    if (url === "/api/search/understand") {
+      calls.push(`sentence:${JSON.parse(init!.body as string).sentence}`);
+      return new Response(JSON.stringify(understood ? { params: understood } : { fallback: true }));
+    }
     const q = new URL(url, "http://localhost").searchParams.get("q");
     const results = q ? [card("a1", "Yasmine"), card("b2", "Karim")] : [card("c3", "Amira")];
     return new Response(JSON.stringify({ results, total: results.length, page: 1, degraded }));
@@ -92,7 +97,7 @@ test("search bar and filters", async (suite) => {
     );
   }
 
-  suite.afterEach(() => { cleanup(); calls = []; pushes.length = 0; degraded = false; });
+  suite.afterEach(() => { cleanup(); calls = []; pushes.length = 0; degraded = false; understood = null; });
 
   await suite.test("a shared link opens with its search and filters already applied", async () => {
     render(<Harness start="/company/cvs?q=computer+vision&domain=data_ai" />);
@@ -146,5 +151,36 @@ test("search bar and filters", async (suite) => {
     render(<Harness start="/company/cvs?q=pytorch" />);
     await screen.findByText("Yasmine");
     assert.ok(screen.getByText(en.company.cvs.degraded));
+  });
+
+  // ── S3-04 smart search ─────────────────────────────────────────────────
+  const SENTENCE = "React developers in Sousse looking for a PFE";
+
+  await suite.test("smart search: Enter sends the sentence once, and what it understood becomes the search and chips", async () => {
+    understood = "q=developers&skill=React&city=Sousse&looking_for=pfe";
+    render(<Harness start="/company/cvs" />);
+    await screen.findByText("Amira");
+    const user = userEvent.setup();
+    await user.click(screen.getByRole("button", { name: en.company.cvs.smart }));
+    await user.type(screen.getByRole("searchbox"), SENTENCE);
+    await new Promise((r) => setTimeout(r, 700));
+    assert.deepEqual(pushes, [], "no search while typing: each one is an AI call");
+    await user.keyboard("{Enter}");
+    await waitFor(() => assert.deepEqual(pushes, ["/company/cvs?q=developers&looking_for=pfe&skill=React&city=Sousse"]));
+    assert.deepEqual(calls.filter((c) => c.startsWith("sentence:")), [`sentence:${SENTENCE}`]);
+
+    const chips = screen.getByRole("list", { name: en.company.cvs.activeFilters });
+    assert.deepEqual(within(chips).getAllByRole("button").map((b) => b.textContent), [en.upload.choices.pfe, "React", "Sousse"]);
+    await user.click(within(chips).getByRole("button", { name: "Remove Sousse" }));
+    assert.equal(pushes.at(-1), "/company/cvs?q=developers&looking_for=pfe&skill=React");
+  });
+
+  await suite.test("smart search: when it can't understand, the sentence is searched as typed", async () => {
+    render(<Harness start="/company/cvs" />);
+    await screen.findByText("Amira");
+    const user = userEvent.setup();
+    await user.click(screen.getByRole("button", { name: en.company.cvs.smart }));
+    await user.type(screen.getByRole("searchbox"), `${SENTENCE}{Enter}`);
+    await waitFor(() => assert.deepEqual(pushes, [`/company/cvs?${new URLSearchParams({ q: SENTENCE })}`]));
   });
 });

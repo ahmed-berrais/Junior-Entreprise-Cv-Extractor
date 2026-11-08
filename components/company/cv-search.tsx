@@ -10,13 +10,14 @@ import { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
-import { SearchIcon, SlidersHorizontalIcon, XIcon } from "lucide-react";
+import { SearchIcon, SlidersHorizontalIcon, SparklesIcon, XIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   activeFilterCount, EMPTY_SEARCH, isEmptySearch, MAX_QUERY, readSearchState, writeSearchState, type SearchState,
 } from "@/lib/search/url";
 import { CvGrid } from "./cv-grid";
+import { FilterChips } from "./filter-chips";
 import { FilterPanel } from "./filter-panel";
 
 export const SEARCH_DELAY_MS = 500;
@@ -44,13 +45,35 @@ export function CvSearch({ domains }: { domains: readonly string[] }) {
     router.push(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
   };
 
-  // Search 500 ms after the last key.
+  // S3-04 · Smart search: the sentence goes to Gemini on Enter only (one AI call each), and what it
+  // understood replaces the search. On any failure, the sentence is searched as typed.
+  const [smart, setSmart] = useState(false);
+  const [understanding, setUnderstanding] = useState(false);
+  async function smartSearch() {
+    setUnderstanding(true);
+    try {
+      const response = await fetch("/api/search/understand", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sentence: text }),
+        signal: AbortSignal.timeout(10_000),
+      });
+      const body = response.ok ? await response.json() : null;
+      go(typeof body?.params === "string" ? readSearchState(new URLSearchParams(body.params)) : { ...state, q: text });
+    } catch {
+      go({ ...state, q: text });
+    } finally {
+      setUnderstanding(false);
+    }
+  }
+
+  // Search 500 ms after the last key (not in smart mode: that would be one AI call per pause).
   useEffect(() => {
-    if (text.trim() === state.q) return;
+    if (smart || text.trim() === state.q) return;
     const timer = setTimeout(() => go({ ...state, q: text }), SEARCH_DELAY_MS);
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- `go` and `state` are rebuilt every render from the URL
-  }, [text, query]);
+  }, [text, query, smart]);
 
   const filters = activeFilterCount(state);
   const clearAll = () => {
@@ -76,7 +99,8 @@ export function CvSearch({ domains }: { domains: readonly string[] }) {
           className="flex gap-2"
           onSubmit={(e) => {
             e.preventDefault();
-            go({ ...state, q: text });
+            if (smart && text.trim()) void smartSearch();
+            else go({ ...state, q: text });
           }}
         >
           <div className="relative flex-1">
@@ -86,11 +110,23 @@ export function CvSearch({ domains }: { domains: readonly string[] }) {
               value={text}
               maxLength={MAX_QUERY}
               onChange={(e) => setText(e.target.value)}
-              placeholder={t("searchPlaceholder")}
+              placeholder={smart ? t("smartPlaceholder") : t("searchPlaceholder")}
               aria-label={t("searchLabel")}
+              disabled={understanding}
               className="h-10 pl-9"
             />
           </div>
+
+          <Button
+            type="button"
+            variant={smart ? "default" : "outline"}
+            aria-pressed={smart}
+            onClick={() => setSmart(!smart)}
+            className="h-10"
+          >
+            <SparklesIcon aria-hidden="true" />
+            <span className="sr-only sm:not-sr-only">{t("smart")}</span>
+          </Button>
 
           <DialogPrimitive.Root>
             <DialogPrimitive.Trigger render={<Button type="button" variant="outline" className="h-10 lg:hidden" />}>
@@ -119,6 +155,12 @@ export function CvSearch({ domains }: { domains: readonly string[] }) {
             </DialogPrimitive.Portal>
           </DialogPrimitive.Root>
         </form>
+
+        {understanding && <p role="status" className="text-sm text-muted-foreground">{t("understanding")}</p>}
+        <FilterChips
+          state={state}
+          onRemove={(key, value) => go({ ...state, q: text, [key]: state[key].filter((v) => v !== value) })}
+        />
 
         <CvGrid key={query} query={query} searching={!isEmptySearch(state)} ranked={state.q !== ""} onClearAll={clearAll} />
       </div>

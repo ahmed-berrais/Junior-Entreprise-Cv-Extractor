@@ -2,6 +2,21 @@
 
 The extraction prompt lives in `worker/cv_worker/prompts.py` (the worker is Python since 28 Oct). Every change bumps `PROMPT_VERSION` and gets an entry here: what changed, why, and the effect on the test CVs.
 
+## Smart search prompt (S3-04, 8 Nov 2026)
+
+Not a CV prompt: it turns a recruiter's sentence into the search filters (`lib/search/understand.ts`, where the text lives).
+The answer is forced into JSON by a schema whose `looking_for` and `domains` can only be values from the lists, then checked
+by `parseSearchParams` like any search. The prompt's main rules: never guess a filter, take a domain only when the sentence
+names a field ("React developers" must not become `software_engineering` and hide React people in data), and keep what's
+left ("developers") as the search text. Checked 8 Nov on 4 sentences, English and French:
+
+| Sentence | Filters |
+|---|---|
+| React developers in Sousse looking for a PFE | q=developers, skill React, city Sousse, looking_for pfe |
+| je cherche des étudiants en cybersécurité à Tunis pour un stage | city Tunis, looking_for internship, domain cybersecurity |
+| Python data scientist, full-time job, Sfax or Monastir | q=data scientist, skill Python, cities Sfax + Monastir, looking_for job |
+| hello | nothing understood → the sentence is searched as typed |
+
 ## How to test a prompt version by hand
 
 1. Print the prompt: `python -m cv_worker.prompts` (from `worker/`).
